@@ -1,7 +1,11 @@
 package com.james.felixlauncher;
 
+import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.animation.AnimatorListenerCompat;
+import android.support.v4.animation.AnimatorUpdateListenerCompat;
+import android.support.v4.animation.ValueAnimatorCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
@@ -9,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -23,7 +28,9 @@ public class LauncherActivity extends AppCompatActivity {
     Toolbar toolbar;
     ViewPager viewPager;
     PagerAdapter adapter;
-    ImageView clock, apps, fav;
+    View clock, apps, fav;
+    ImageView clockImage, appsImage, favImage;
+    TextView clockText, appsText, favText;
     int primary, accent;
 
     @Override
@@ -31,16 +38,22 @@ public class LauncherActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        clock = (ImageView) findViewById(R.id.clock);
-        apps = (ImageView) findViewById(R.id.apps);
-        fav = (ImageView) findViewById(R.id.fav);
+        clock = findViewById(R.id.clock);
+        apps = findViewById(R.id.apps);
+        fav = findViewById(R.id.fav);
+
+        clockImage = (ImageView) findViewById(R.id.clockImage);
+        appsImage = (ImageView) findViewById(R.id.appsImage);
+        favImage = (ImageView) findViewById(R.id.favImage);
+
+        clockText = (TextView) findViewById(R.id.clockText);
+        appsText = (TextView) findViewById(R.id.appsText);
+        favText = (TextView) findViewById(R.id.favText);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        TypedValue tp = new TypedValue();
-        getTheme().resolveAttribute(android.R.attr.textColorPrimaryInverse, tp, true);
-        primary = tp.data;
+        primary = ContextCompat.getColor(this, android.R.color.secondary_text_dark);
 
         accent = ContextCompat.getColor(this, R.color.colorAccent);
 
@@ -56,22 +69,34 @@ public class LauncherActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-                switch(position) {
-                    case 0:
-                        clock.setColorFilter(accent);
-                        apps.setColorFilter(primary);
-                        fav.setColorFilter(primary);
-                        break;
-                    case 1:
-                        clock.setColorFilter(primary);
-                        apps.setColorFilter(accent);
-                        fav.setColorFilter(primary);
-                        break;
-                    case 2:
-                        clock.setColorFilter(primary);
-                        apps.setColorFilter(primary);
-                        fav.setColorFilter(accent);
-                        break;
+                if (position == 0) {
+                    clockImage.setColorFilter(accent);
+                    clockText.setTextColor(accent);
+                    animateText(14, clockText);
+                } else {
+                    clockImage.setColorFilter(primary);
+                    clockText.setTextColor(primary);
+                    animateText(0, clockText);
+                }
+
+                if (position == 1) {
+                    appsImage.setColorFilter(accent);
+                    appsText.setTextColor(accent);
+                    animateText(14, appsText);
+                } else {
+                    appsImage.setColorFilter(primary);
+                    appsText.setTextColor(primary);
+                    animateText(0, appsText);
+                }
+
+                if (position == 2) {
+                    favImage.setColorFilter(accent);
+                    favText.setTextColor(accent);
+                    animateText(14, favText);
+                } else {
+                    favImage.setColorFilter(primary);
+                    favText.setTextColor(primary);
+                    animateText(0, favText);
                 }
 
                 adapter.onPageChange(position);
@@ -102,6 +127,20 @@ public class LauncherActivity extends AppCompatActivity {
                 viewPager.setCurrentItem(2);
             }
         });
+    }
+
+    private void animateText(final int end, final TextView textView) {
+        ValueAnimator animator = ValueAnimator.ofFloat(textView.getTextSize() / getResources().getDisplayMetrics().scaledDensity, end);
+        animator.setDuration(150);
+
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, (float) animation.getAnimatedValue());
+            }
+        });
+
+        animator.start();
     }
 
     @Override

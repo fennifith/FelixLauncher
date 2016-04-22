@@ -8,7 +8,8 @@
         android:layout_height="wrap_content"
         android:scrollbars="vertical"
         android:clipToPadding="false"
-        android:paddingBottom="56dp"/>
+        android:paddingBottom="68dp"
+        android:paddingTop="12dp"/>
 
     <ProgressBar
         android:id="@+id/progressBar"

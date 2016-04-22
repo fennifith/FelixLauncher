@@ -23,7 +23,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:id="@+id/toolbar"
-                app:title="" />
+                app:title=""
+                android:background="@color/colorPrimary" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
 
@@ -44,33 +45,89 @@
         android:background="@color/colorPrimary"
         android:elevation="10dp">
 
-        <ImageView
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:background="?attr/selectableItemBackground"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:src="@drawable/ic_clock"
-            android:scaleType="center"
-            android:background="?attr/selectableItemBackground"
-            android:id="@+id/clock" />
+            android:gravity="center_vertical"
+            android:id="@+id/clock">
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:src="@drawable/ic_apps"
-            android:scaleType="center"
-            android:tint="@color/colorAccent"
-            android:background="?attr/selectableItemBackground"
-            android:id="@+id/apps" />
+            <com.james.felixlauncher.SquareImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_clock"
+                android:scaleType="center"
+                android:id="@+id/clockImage"
+                android:tint="?android:textColorSecondary"
+                android:layout_gravity="center_horizontal" />
 
-        <ImageView
-            android:layout_width="match_parent"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Clock"
+                android:id="@+id/clockText"
+                android:layout_gravity="center_horizontal|bottom"
+                android:textColor="?android:textColorSecondary"
+                android:textSize="0sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="?attr/selectableItemBackground"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:id="@+id/apps">
+
+            <com.james.felixlauncher.SquareImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_apps"
+                android:scaleType="center"
+                android:tint="@color/colorAccent"
+                android:id="@+id/appsImage"
+                android:layout_gravity="center_horizontal" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Apps"
+                android:id="@+id/appsText"
+                android:layout_gravity="center_horizontal|bottom"
+                android:textColor="@color/colorAccent" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:src="@drawable/ic_fav"
-            android:scaleType="center"
             android:background="?attr/selectableItemBackground"
-            android:id="@+id/fav" />
+            android:gravity="center_vertical"
+            android:id="@+id/fav">
+
+            <com.james.felixlauncher.SquareImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_fav"
+                android:scaleType="center"
+                android:id="@+id/favImage"
+                android:tint="?android:textColorSecondary"
+                android:layout_gravity="center_horizontal" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Favorites"
+                android:id="@+id/favText"
+                android:layout_gravity="center_horizontal|bottom"
+                android:textColor="?android:textColorSecondary"
+                android:textSize="0sp" />
+        </LinearLayout>
+
     </LinearLayout>
 
 

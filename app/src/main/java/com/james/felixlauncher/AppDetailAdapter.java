@@ -79,6 +79,12 @@ public class AppDetailAdapter extends RecyclerView.Adapter<AppDetailAdapter.View
         notifyDataSetChanged();
     }
 
+    public ArrayList<AppDetail> getList() {
+        ArrayList<AppDetail> list = new ArrayList<>();
+        list.addAll(this.list);
+        return list;
+    }
+
     @Override
     public AppDetailAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

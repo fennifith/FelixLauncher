@@ -23,6 +23,7 @@ public class FavFragment extends Fragment {
     AppDetailAdapter adapter;
     PackageManager manager;
     ProgressBar progress;
+    Thread t;
 
     @Nullable
     @Override
@@ -55,9 +56,10 @@ public class FavFragment extends Fragment {
     }
 
     public void load() {
+        if (t != null && t.isAlive()) t.interrupt();
         list.clear();
 
-        new Thread() {
+        t = new Thread() {
             @Override
             public void run() {
                 List<ResolveInfo> availableActivities = manager.queryIntentActivities(new Intent(Intent.ACTION_MAIN, null).addCategory(Intent.CATEGORY_LAUNCHER), 0);
@@ -69,10 +71,11 @@ public class FavFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        adapter.setList(list);
+                        if (adapter.getList().size() != list.size()) adapter.setList(list);
                     }
                 });
             }
-        }.start();
+        };
+        t.start();
     }
 }
