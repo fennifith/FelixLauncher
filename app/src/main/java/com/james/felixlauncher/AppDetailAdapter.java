@@ -6,12 +6,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.provider.ContactsContract;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.HapticFeedbackConstants;
@@ -94,34 +96,41 @@ public class AppDetailAdapter extends RecyclerView.Adapter<AppDetailAdapter.View
 
     @Override
     public void onBindViewHolder(final AppDetailAdapter.ViewHolder holder, int position) {
-        if (holder.t != null) holder.t.interrupt();
+        if (holder.t != null && holder.t.isAlive()) holder.t.interrupt();
 
         holder.v.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
 
         TextView title = (TextView) holder.v.findViewById(R.id.name);
-        TextView subtitle = (TextView) holder.v.findViewById(R.id.extra);
-
         title.setText(filteredList.get(position).label);
-        subtitle.setText(filteredList.get(position).name);
+        title.setTextColor(SettingsActivity.getPrimaryTextColor(activity));
 
-        holder.t = new Thread() {
-            @Override
-            public void run() {
-                final Drawable drawable;
-                try {
-                    drawable = manager.getApplicationIcon(filteredList.get(holder.getAdapterPosition()).name);
-                } catch (PackageManager.NameNotFoundException e) {
-                    return;
-                }
-                activity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ((SquareImageView) holder.v.findViewById(R.id.image)).setImageDrawable(drawable);
+        TextView subtitle = (TextView) holder.v.findViewById(R.id.extra);
+        subtitle.setText(filteredList.get(position).name);
+        subtitle.setTextColor(SettingsActivity.getSecondaryTextColor(activity));
+
+        if (filteredList.get(holder.getAdapterPosition()).icon != null) ((SquareImageView) holder.v.findViewById(R.id.image)).setImageDrawable(filteredList.get(holder.getAdapterPosition()).icon);
+        else {
+            holder.t = new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        filteredList.get(holder.getAdapterPosition()).icon = manager.getApplicationIcon(filteredList.get(holder.getAdapterPosition()).name);
+                    } catch (PackageManager.NameNotFoundException e) {
+                        return;
                     }
-                });
-            }
-        };
-        holder.t.start();
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                ((SquareImageView) holder.v.findViewById(R.id.image)).setImageDrawable(filteredList.get(holder.getAdapterPosition()).icon);
+                            } catch (Exception ignored) {
+                            }
+                        }
+                    });
+                }
+            };
+            holder.t.start();
+        }
 
         holder.v.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,6 +150,9 @@ public class AppDetailAdapter extends RecyclerView.Adapter<AppDetailAdapter.View
                 AppDetail app = filteredList.get(holder.getAdapterPosition());
                 if (app.fav) ((TextView) sheet.findViewById(R.id.fav_text)).setText("Remove from Favorites");
                 if (app.hide) ((TextView) sheet.findViewById(R.id.hide_text)).setText("Set Visible");
+
+                if (app.icon != null) ((ImageView) sheet.findViewById(R.id.icon)).setImageDrawable(app.icon);
+                ((TextView) sheet.findViewById(R.id.title)).setText(app.label);
 
                 sheet.findViewById(R.id.sheet_fav).setOnClickListener(new View.OnClickListener() {
                     @Override

@@ -22,6 +22,7 @@ public class AppDetail implements Parcelable {
 
     String label, name;
     boolean fav, hide;
+    Drawable icon;
 
     public AppDetail(Context context, String label, String name) {
         this.label = label;

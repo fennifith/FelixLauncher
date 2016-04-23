@@ -2,9 +2,34 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="8dp"
     android:paddingBottom="8dp"
     android:background="#fff">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+        <com.james.felixlauncher.SquareImageView
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="#bdbdbd"
+            android:id="@+id/icon"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="18dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="App Name"
+            android:id="@+id/title"
+            android:textColor="#DE000000"
+            android:textSize="20sp"
+            android:layout_gravity="center_vertical" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:orientation="horizontal"
@@ -32,7 +57,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:gravity="center_vertical"
-            android:textColor="#000"
+            android:textColor="#8A000000"
             android:textIsSelectable="false"
             android:id="@+id/fav_text" />
 
@@ -64,7 +89,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:gravity="center_vertical"
-            android:textColor="#000"
+            android:textColor="#8A000000"
             android:textIsSelectable="false"
             android:id="@+id/hide_text" />
 
@@ -96,7 +121,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:gravity="center_vertical"
-            android:textColor="#000"
+            android:textColor="#8A000000"
             android:textIsSelectable="false" />
 
     </LinearLayout>
@@ -127,7 +152,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:gravity="center_vertical"
-            android:textColor="#000"
+            android:textColor="#8A000000"
             android:textIsSelectable="false" />
 
     </LinearLayout>

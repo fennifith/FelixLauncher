@@ -1,25 +1,22 @@
 package com.james.felixlauncher;
 
 import android.animation.ValueAnimator;
+import android.app.WallpaperManager;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.animation.AnimatorListenerCompat;
-import android.support.v4.animation.AnimatorUpdateListenerCompat;
-import android.support.v4.animation.ValueAnimatorCompat;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.DisplayMetrics;
 import android.util.TypedValue;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -127,6 +124,11 @@ public class LauncherActivity extends AppCompatActivity {
                 viewPager.setCurrentItem(2);
             }
         });
+
+        if (SettingsActivity.isWallpaper(this)) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) findViewById(R.id.coordinator).setBackgroundDrawable(WallpaperManager.getInstance(this).getDrawable());
+            else findViewById(R.id.coordinator).setBackground(WallpaperManager.getInstance(this).getDrawable());
+        }
     }
 
     private void animateText(final int end, final TextView textView) {
@@ -177,7 +179,14 @@ public class LauncherActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_settings) startActivity(new Intent(LauncherActivity.this, AboutActivity.class));
+        switch(item.getItemId()) {
+            case R.id.action_settings:
+                startActivity(new Intent(LauncherActivity.this, SettingsActivity.class));
+                break;
+            case R.id.action_hidden:
+                startActivity(new Intent(LauncherActivity.this, HiddenActivity.class));
+                break;
+        }
         return super.onOptionsItemSelected(item);
     }
 }

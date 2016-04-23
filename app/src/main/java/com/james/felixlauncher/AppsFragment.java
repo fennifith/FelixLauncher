@@ -30,7 +30,7 @@ public class AppsFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_recycler, container, false);
 
         progress = (ProgressBar) rootView.findViewById(R.id.progressBar);
-        progress.setVisibility(View.GONE);
+        progress.setVisibility(View.VISIBLE);
 
         manager = getContext().getPackageManager();
         list = new ArrayList<>();
@@ -70,6 +70,7 @@ public class AppsFragment extends Fragment {
                     @Override
                     public void run() {
                         if (adapter.getList().size() != list.size()) adapter.setList(list);
+                        progress.setVisibility(View.GONE);
                     }
                 });
             }

@@ -1,11 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:paddingLeft="16dp"
+    android:paddingTop="16dp"
+    android:paddingRight="16dp"
+    android:paddingBottom="72dp">
 
-    <AnalogClock
-        android:layout_height="wrap_content"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="wrap_content"
-        android:layout_gravity="center" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="07:52"
+                android:id="@+id/clock"
+                android:layout_gravity="center_vertical"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="64sp"
+                android:layout_margin="8dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="AM"
+                android:id="@+id/time"
+                android:layout_gravity="bottom"
+                android:textColor="?android:textColorSecondary"
+                android:textSize="24sp"
+                android:layout_margin="6dp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sat, April 23"
+            android:id="@+id/date"
+            android:textSize="20sp"
+            android:textColor="?android:textColorSecondary"
+            android:layout_gravity="center_horizontal"
+            android:textIsSelectable="false" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_gravity="bottom"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:background="?attr/selectableItemBackground"
+        android:id="@+id/alarm">
+
+        <com.james.felixlauncher.SquareImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_clock"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="8dp"
+            android:tint="?android:textColorSecondary" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Set Alarm"
+            android:layout_gravity="center_vertical" />
+
+    </LinearLayout>
 
 </FrameLayout>
