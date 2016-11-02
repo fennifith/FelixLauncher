@@ -54,7 +54,7 @@
             android:gravity="center_vertical"
             android:id="@+id/clock">
 
-            <com.james.felixlauncher.SquareImageView
+            <com.james.felixlauncher.views.SquareImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_clock"
@@ -82,7 +82,7 @@
             android:gravity="center_vertical"
             android:id="@+id/apps">
 
-            <com.james.felixlauncher.SquareImageView
+            <com.james.felixlauncher.views.SquareImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_apps"
@@ -109,7 +109,7 @@
             android:gravity="center_vertical"
             android:id="@+id/fav">
 
-            <com.james.felixlauncher.SquareImageView
+            <com.james.felixlauncher.views.SquareImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_fav"

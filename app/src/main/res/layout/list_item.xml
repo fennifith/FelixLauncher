@@ -6,7 +6,7 @@
     android:orientation="horizontal"
     android:background="?attr/selectableItemBackground">
 
-    <com.james.felixlauncher.SquareImageView
+    <com.james.felixlauncher.views.SquareImageView
         android:id="@+id/image"
         android:layout_width="44dp"
         android:layout_height="44dp"

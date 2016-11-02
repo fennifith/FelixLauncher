@@ -10,7 +10,7 @@
         android:label="Felix Launcher"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".LauncherActivity"
+            android:name=".activities.LauncherActivity"
             android:label="Felix Launcher"
             android:launchMode="singleTask"
             android:stateNotNeeded="true"
@@ -24,24 +24,24 @@
         </activity>
 
         <activity
-            android:name=".SettingsActivity"
+            android:name=".activities.SettingsActivity"
             android:label="Settings"
             android:theme="@style/Theme.AppCompat"
-            android:parentActivityName="com.james.felixlauncher.LauncherActivity" >
+            android:parentActivityName="com.james.felixlauncher.activities.LauncherActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.james.felixlauncher.LauncherActivity" />
+                android:value="com.james.felixlauncher.activities.LauncherActivity" />
 
         </activity>
 
         <activity
-            android:name=".HiddenActivity"
+            android:name=".activities.HiddenActivity"
             android:label="Hidden Apps"
             android:theme="@style/Theme.AppCompat"
-            android:parentActivityName="com.james.felixlauncher.LauncherActivity" >
+            android:parentActivityName="com.james.felixlauncher.activities.LauncherActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.james.felixlauncher.LauncherActivity" />
+                android:value="com.james.felixlauncher.activities.LauncherActivity" />
         </activity>
     </application>
 

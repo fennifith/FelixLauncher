@@ -1,19 +1,11 @@
-package com.james.felixlauncher;
+package com.james.felixlauncher.adapters;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.databinding.DataBindingUtil;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.TransitionDrawable;
 import android.net.Uri;
-import android.preference.PreferenceManager;
-import android.provider.ContactsContract;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.HapticFeedbackConstants;
@@ -22,6 +14,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.james.felixlauncher.R;
+import com.james.felixlauncher.activities.SettingsActivity;
+import com.james.felixlauncher.data.AppDetail;
+import com.james.felixlauncher.views.SquareImageView;
 
 import java.util.ArrayList;
 import java.util.Collections;

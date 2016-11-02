@@ -1,14 +1,12 @@
-package com.james.felixlauncher;
+package com.james.felixlauncher.activities;
 
 import android.animation.ValueAnimator;
 import android.app.WallpaperManager;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -19,6 +17,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.james.felixlauncher.R;
+import com.james.felixlauncher.adapters.PagerAdapter;
 
 public class LauncherActivity extends AppCompatActivity {
 

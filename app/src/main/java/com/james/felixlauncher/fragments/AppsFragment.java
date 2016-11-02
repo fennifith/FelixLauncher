@@ -1,41 +1,48 @@
-package com.james.felixlauncher;
+package com.james.felixlauncher.fragments;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ProgressBar;
+
+import com.james.felixlauncher.R;
+import com.james.felixlauncher.adapters.AppDetailAdapter;
+import com.james.felixlauncher.data.AppDetail;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class HiddenActivity extends AppCompatActivity {
+public class AppsFragment extends Fragment {
 
-    AppDetailAdapter adapter;
     ArrayList<AppDetail> list;
-    ProgressBar progress;
+    AppDetailAdapter adapter;
     PackageManager manager;
+    ProgressBar progress;
     Thread t;
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_recycler);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_recycler, container, false);
 
-        manager = getPackageManager();
-        list = new ArrayList<>();
-
-        progress = (ProgressBar) findViewById(R.id.progressBar);
+        progress = (ProgressBar) rootView.findViewById(R.id.progressBar);
         progress.setVisibility(View.VISIBLE);
 
-        RecyclerView recycler = (RecyclerView) findViewById(R.id.recycler);
-        recycler.setLayoutManager(new LinearLayoutManager(this));
+        manager = getContext().getPackageManager();
+        list = new ArrayList<>();
 
-        adapter = new AppDetailAdapter(this, manager, list);
+        RecyclerView recycler = (RecyclerView) rootView.findViewById(R.id.recycler);
+        recycler.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        adapter = new AppDetailAdapter(getActivity(), manager, list);
         adapter.setListener(new AppDetailAdapter.Listener() {
             @Override
             public void onChange() {
@@ -46,6 +53,8 @@ public class HiddenActivity extends AppCompatActivity {
         recycler.setAdapter(adapter);
 
         load();
+
+        return rootView;
     }
 
     public void load() {
@@ -57,11 +66,11 @@ public class HiddenActivity extends AppCompatActivity {
             public void run() {
                 List<ResolveInfo> availableActivities = manager.queryIntentActivities(new Intent(Intent.ACTION_MAIN, null).addCategory(Intent.CATEGORY_LAUNCHER), 0);
                 for (ResolveInfo ri : availableActivities) {
-                    AppDetail app = new AppDetail(HiddenActivity.this, ri.loadLabel(manager).toString(), ri.activityInfo.packageName);
-                    if (app.hide) list.add(app);
+                    AppDetail app = new AppDetail(getContext(), ri.loadLabel(manager).toString(), ri.activityInfo.packageName);
+                    if (!app.hide) list.add(app);
                 }
 
-                runOnUiThread(new Runnable() {
+                getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         if (adapter.getList().size() != list.size()) adapter.setList(list);
@@ -71,5 +80,9 @@ public class HiddenActivity extends AppCompatActivity {
             }
         };
         t.start();
+    }
+
+    public void search(String text) {
+        if (adapter != null) adapter.search(text);
     }
 }

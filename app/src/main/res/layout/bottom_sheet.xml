@@ -12,7 +12,7 @@
         android:paddingLeft="16dp"
         android:paddingRight="16dp">
 
-        <com.james.felixlauncher.SquareImageView
+        <com.james.felixlauncher.views.SquareImageView
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:src="#bdbdbd"
@@ -38,7 +38,7 @@
         android:background="?attr/selectableItemBackground"
         android:id="@+id/sheet_fav">
 
-        <com.james.felixlauncher.SquareImageView
+        <com.james.felixlauncher.views.SquareImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_fav"
@@ -70,7 +70,7 @@
         android:background="?attr/selectableItemBackground"
         android:id="@+id/sheet_hide">
 
-        <com.james.felixlauncher.SquareImageView
+        <com.james.felixlauncher.views.SquareImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_hide"
@@ -102,7 +102,7 @@
         android:background="?attr/selectableItemBackground"
         android:id="@+id/sheet_play">
 
-        <com.james.felixlauncher.SquareImageView
+        <com.james.felixlauncher.views.SquareImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_store"
@@ -133,7 +133,7 @@
         android:background="?attr/selectableItemBackground"
         android:id="@+id/sheet_settings">
 
-        <com.james.felixlauncher.SquareImageView
+        <com.james.felixlauncher.views.SquareImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_settings"

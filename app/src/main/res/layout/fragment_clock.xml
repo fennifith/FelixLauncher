@@ -62,7 +62,7 @@
         android:background="?attr/selectableItemBackground"
         android:id="@+id/alarm">
 
-        <com.james.felixlauncher.SquareImageView
+        <com.james.felixlauncher.views.SquareImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_clock"

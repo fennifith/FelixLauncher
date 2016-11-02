@@ -1,4 +1,4 @@
-package com.james.felixlauncher;
+package com.james.felixlauncher.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,9 +9,10 @@ import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
-import android.util.TypedValue;
 import android.view.View;
 import android.widget.CompoundButton;
+
+import com.james.felixlauncher.R;
 
 
 public class SettingsActivity extends AppCompatActivity {

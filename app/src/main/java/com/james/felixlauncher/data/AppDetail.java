@@ -1,4 +1,4 @@
-package com.james.felixlauncher;
+package com.james.felixlauncher.data;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -20,9 +20,9 @@ public class AppDetail implements Parcelable {
         }
     };
 
-    String label, name;
-    boolean fav, hide;
-    Drawable icon;
+    public String label, name;
+    public boolean fav, hide;
+    public Drawable icon;
 
     public AppDetail(Context context, String label, String name) {
         this.label = label;

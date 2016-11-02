@@ -1,10 +1,13 @@
-package com.james.felixlauncher;
+package com.james.felixlauncher.adapters;
 
 import android.app.Activity;
-import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+
+import com.james.felixlauncher.fragments.AppsFragment;
+import com.james.felixlauncher.fragments.ClockFragment;
+import com.james.felixlauncher.fragments.FavFragment;
 
 public class PagerAdapter extends FragmentStatePagerAdapter {
 

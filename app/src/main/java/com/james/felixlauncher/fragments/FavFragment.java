@@ -1,4 +1,4 @@
-package com.james.felixlauncher;
+package com.james.felixlauncher.fragments;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -6,17 +6,21 @@ import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import com.james.felixlauncher.R;
+import com.james.felixlauncher.adapters.AppDetailAdapter;
+import com.james.felixlauncher.data.AppDetail;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class AppsFragment extends Fragment {
+public class FavFragment extends Fragment {
 
     ArrayList<AppDetail> list;
     AppDetailAdapter adapter;
@@ -36,7 +40,7 @@ public class AppsFragment extends Fragment {
         list = new ArrayList<>();
 
         RecyclerView recycler = (RecyclerView) rootView.findViewById(R.id.recycler);
-        recycler.setLayoutManager(new LinearLayoutManager(getContext()));
+        recycler.setLayoutManager(new GridLayoutManager(getContext(), 3));
 
         adapter = new AppDetailAdapter(getActivity(), manager, list);
         adapter.setListener(new AppDetailAdapter.Listener() {
@@ -45,6 +49,7 @@ public class AppsFragment extends Fragment {
                 load();
             }
         });
+        adapter.setGrid(true);
 
         recycler.setAdapter(adapter);
 
@@ -63,7 +68,7 @@ public class AppsFragment extends Fragment {
                 List<ResolveInfo> availableActivities = manager.queryIntentActivities(new Intent(Intent.ACTION_MAIN, null).addCategory(Intent.CATEGORY_LAUNCHER), 0);
                 for (ResolveInfo ri : availableActivities) {
                     AppDetail app = new AppDetail(getContext(), ri.loadLabel(manager).toString(), ri.activityInfo.packageName);
-                    if (!app.hide) list.add(app);
+                    if (app.fav && !app.hide) list.add(app);
                 }
 
                 getActivity().runOnUiThread(new Runnable() {
@@ -76,9 +81,5 @@ public class AppsFragment extends Fragment {
             }
         };
         t.start();
-    }
-
-    public void search(String text) {
-        if (adapter != null) adapter.search(text);
     }
 }

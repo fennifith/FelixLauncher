@@ -1,4 +1,4 @@
-package com.james.felixlauncher;
+package com.james.felixlauncher.fragments;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.james.felixlauncher.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
