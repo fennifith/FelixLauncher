@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.support.design.widget.BottomSheetDialog;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
@@ -132,8 +133,10 @@ public class AppDetailAdapter extends RecyclerView.Adapter<AppDetailAdapter.View
         holder.v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = manager.getLaunchIntentForPackage(filteredList.get(holder.getAdapterPosition()).name);
-                activity.startActivity(i);
+                activity.startActivity(
+                        manager.getLaunchIntentForPackage(filteredList.get(holder.getAdapterPosition()).name),
+                        ActivityOptionsCompat.makeScaleUpAnimation(v, (int) v.getX() - (v.getWidth() / 2), (int) v.getY() - (v.getHeight() / 2), v.getWidth(), v.getHeight()).toBundle()
+                );
             }
         });
 

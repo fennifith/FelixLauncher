@@ -60,6 +60,7 @@
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
         android:background="?attr/selectableItemBackground"
+        android:gravity="center"
         android:id="@+id/alarm">
 
         <com.james.felixlauncher.views.SquareImageView
