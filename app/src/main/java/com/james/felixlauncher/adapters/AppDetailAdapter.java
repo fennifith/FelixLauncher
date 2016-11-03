@@ -24,17 +24,18 @@ import com.james.felixlauncher.views.SquareImageView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 public class AppDetailAdapter extends RecyclerView.Adapter<AppDetailAdapter.ViewHolder> {
 
-    private ArrayList<AppDetail> list;
-    private ArrayList<AppDetail> filteredList;
+    private List<AppDetail> list;
+    private List<AppDetail> filteredList;
     private boolean grid;
     private Listener listener;
     private PackageManager manager;
     private Activity activity;
 
-    public AppDetailAdapter(final Activity activity, PackageManager manager, ArrayList<AppDetail> list) {
+    public AppDetailAdapter(final Activity activity, PackageManager manager, List<AppDetail> list) {
         this.list = new ArrayList<>();
         this.list.addAll(list);
 
@@ -63,7 +64,7 @@ public class AppDetailAdapter extends RecyclerView.Adapter<AppDetailAdapter.View
         this.grid = grid;
     }
 
-    public void setList(ArrayList<AppDetail> list) {
+    public void setList(List<AppDetail> list) {
         this.list.clear();
         this.list.addAll(list);
 
@@ -72,15 +73,15 @@ public class AppDetailAdapter extends RecyclerView.Adapter<AppDetailAdapter.View
 
         Collections.sort(filteredList, new Comparator<AppDetail>() {
             public int compare(AppDetail v1, AppDetail v2) {
-                return v1.label.compareTo(v2.label);
+                return v1.date.compareTo(v2.date);
             }
         });
 
         notifyDataSetChanged();
     }
 
-    public ArrayList<AppDetail> getList() {
-        ArrayList<AppDetail> list = new ArrayList<>();
+    public List<AppDetail> getList() {
+        List<AppDetail> list = new ArrayList<>();
         list.addAll(this.list);
         return list;
     }
@@ -103,7 +104,7 @@ public class AppDetailAdapter extends RecyclerView.Adapter<AppDetailAdapter.View
         title.setTextColor(SettingsActivity.getPrimaryTextColor(activity));
 
         TextView subtitle = (TextView) holder.v.findViewById(R.id.extra);
-        subtitle.setText(filteredList.get(position).name);
+        subtitle.setText(filteredList.get(position).date);
         subtitle.setTextColor(SettingsActivity.getSecondaryTextColor(activity));
 
         if (filteredList.get(holder.getAdapterPosition()).icon != null) ((SquareImageView) holder.v.findViewById(R.id.image)).setImageDrawable(filteredList.get(holder.getAdapterPosition()).icon);
@@ -134,7 +135,7 @@ public class AppDetailAdapter extends RecyclerView.Adapter<AppDetailAdapter.View
             @Override
             public void onClick(View v) {
                 activity.startActivity(
-                        manager.getLaunchIntentForPackage(filteredList.get(holder.getAdapterPosition()).name),
+                        filteredList.get(holder.getAdapterPosition()).getIntent(activity, manager),
                         ActivityOptionsCompat.makeScaleUpAnimation(v, (int) v.getX() - (v.getWidth() / 2), (int) v.getY() - (v.getHeight() / 2), v.getWidth(), v.getHeight()).toBundle()
                 );
             }

@@ -1,5 +1,6 @@
 package com.james.felixlauncher.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -22,7 +23,7 @@ import java.util.List;
 
 public class AppsFragment extends Fragment {
 
-    ArrayList<AppDetail> list;
+    List<AppDetail> list;
     AppDetailAdapter adapter;
     PackageManager manager;
     ProgressBar progress;
@@ -36,13 +37,10 @@ public class AppsFragment extends Fragment {
         progress = (ProgressBar) rootView.findViewById(R.id.progressBar);
         progress.setVisibility(View.VISIBLE);
 
-        manager = getContext().getPackageManager();
-        list = new ArrayList<>();
-
         RecyclerView recycler = (RecyclerView) rootView.findViewById(R.id.recycler);
         recycler.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        adapter = new AppDetailAdapter(getActivity(), manager, list);
+        adapter = new AppDetailAdapter(getActivity(), getPackageManager(), getAppList());
         adapter.setListener(new AppDetailAdapter.Listener() {
             @Override
             public void onChange() {
@@ -57,23 +55,41 @@ public class AppsFragment extends Fragment {
         return rootView;
     }
 
+    private List<AppDetail> getAppList() {
+        if (list == null) list = new ArrayList<>();
+        return list;
+    }
+
+    private PackageManager getPackageManager() {
+        if (manager == null) {
+            Context context = getContext();
+            if (context != null) manager = getContext().getPackageManager();
+        }
+
+        return manager;
+    }
+
     public void load() {
         if (t != null && t.isAlive()) t.interrupt();
-        list.clear();
+        getAppList().clear();
 
         t = new Thread() {
             @Override
             public void run() {
-                List<ResolveInfo> availableActivities = manager.queryIntentActivities(new Intent(Intent.ACTION_MAIN, null).addCategory(Intent.CATEGORY_LAUNCHER), 0);
+                PackageManager packageManager = getPackageManager();
+                if (packageManager == null) return;
+
+                List<ResolveInfo> availableActivities = packageManager.queryIntentActivities(new Intent(Intent.ACTION_MAIN, null).addCategory(Intent.CATEGORY_LAUNCHER), 0);
                 for (ResolveInfo ri : availableActivities) {
                     AppDetail app = new AppDetail(getContext(), ri.loadLabel(manager).toString(), ri.activityInfo.packageName);
-                    if (!app.hide) list.add(app);
+                    if (!app.hide) getAppList().add(app);
                 }
 
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (adapter.getList().size() != list.size()) adapter.setList(list);
+                        if (adapter.getList().size() != getAppList().size())
+                            adapter.setList(getAppList());
                         progress.setVisibility(View.GONE);
                     }
                 });

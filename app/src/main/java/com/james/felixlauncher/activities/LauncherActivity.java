@@ -1,8 +1,8 @@
 package com.james.felixlauncher.activities;
 
 import android.animation.ValueAnimator;
-import android.app.WallpaperManager;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -125,11 +125,6 @@ public class LauncherActivity extends AppCompatActivity {
                 viewPager.setCurrentItem(2);
             }
         });
-
-        if (SettingsActivity.isWallpaper(this)) {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) findViewById(R.id.coordinator).setBackgroundDrawable(WallpaperManager.getInstance(this).getDrawable());
-            else findViewById(R.id.coordinator).setBackground(WallpaperManager.getInstance(this).getDrawable());
-        }
     }
 
     private void animateText(final int end, final TextView textView) {
@@ -151,7 +146,6 @@ public class LauncherActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_search, menu);
 
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
-
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -189,5 +183,28 @@ public class LauncherActivity extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        View coordinator = findViewById(R.id.coordinator);
+        if (coordinator != null) {
+            if (SettingsActivity.isWallpaper(this)) {
+                coordinator.setBackgroundColor(Color.TRANSPARENT);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.colorOverlayDark));
+                }
+            } else {
+                coordinator.setBackgroundColor(ContextCompat.getColor(this, R.color.colorBackground));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
+                }
+            }
+        }
+
+        if (adapter != null && viewPager != null)
+            adapter.onPageChange(viewPager.getCurrentItem());
     }
 }

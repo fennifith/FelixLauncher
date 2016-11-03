@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Felix Launcher</string>
+    <string name="app_desc">This app is designed to extend the battery life of a device by using the smallest, least power-hogging setup possible while still providing a quick and easy way to open apps and not completely sacrificing design. This app is 6.3 megabytes. Compared to most other home screens that implement extensive theming options, this could dramatically increase the overall battery life and performance of a phone.</string>
+
+    <string name="clock">Clock</string>
+    <string name="apps">Apps</string>
+    <string name="favorites">Favorites</string>
+    <string name="about">About</string>
+    <string name="dark_text">Dark Text</string>
+    <string name="show_wallpaper">Show Wallpaper</string>
+    <string name="set_wallpaper">Set Wallpaper</string>
+    <string name="set_alarm">Set Alarm</string>
+    <string name="add_favorites">Add to Favorites</string>
+    <string name="set_hidden">Set Hidden</string>
+    <string name="play_store">Open in Play Store</string>
+    <string name="settings">Settings</string>
+    <string name="search_hint">Enter search query...</string>
+    <string name="hidden_apps">Hidden Apps</string>
+</resources>

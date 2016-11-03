@@ -1,25 +1,26 @@
 package com.james.felixlauncher.adapters;
 
-import android.app.Activity;
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import com.james.felixlauncher.R;
 import com.james.felixlauncher.fragments.AppsFragment;
 import com.james.felixlauncher.fragments.ClockFragment;
 import com.james.felixlauncher.fragments.FavFragment;
 
 public class PagerAdapter extends FragmentStatePagerAdapter {
 
-    Activity activity;
+    private Context context;
 
-    ClockFragment clockFragment;
-    AppsFragment appsFragment;
-    FavFragment favFragment;
+    private ClockFragment clockFragment;
+    private AppsFragment appsFragment;
+    private FavFragment favFragment;
 
-    public PagerAdapter(Activity activity, final FragmentManager manager) {
+    public PagerAdapter(Context context, final FragmentManager manager) {
         super(manager);
-        this.activity = activity;
+        this.context = context;
 
         clockFragment = new ClockFragment();
         appsFragment = new AppsFragment();
@@ -49,11 +50,11 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     public CharSequence getPageTitle(int position) {
         switch (position) {
             case 0:
-                return "Clock";
+                return context.getString(R.string.clock);
             case 1:
-                return "Apps";
+                return context.getString(R.string.apps);
             case 2:
-                return "Favorites";
+                return context.getString(R.string.favorites);
             default:
                 return null;
         }

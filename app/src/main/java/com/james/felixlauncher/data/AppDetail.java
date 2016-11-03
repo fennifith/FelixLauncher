@@ -1,13 +1,21 @@
 package com.james.felixlauncher.data;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
+import android.text.format.DateFormat;
+
+import java.util.Calendar;
 
 public class AppDetail implements Parcelable {
+
+    private static final String DATE_FORMAT = "h:mm • EEEE MMMM d, yyyy";
+
     public static final Creator<AppDetail> CREATOR = new Creator<AppDetail>() {
         @Override
         public AppDetail createFromParcel(Parcel in) {
@@ -20,7 +28,7 @@ public class AppDetail implements Parcelable {
         }
     };
 
-    public String label, name;
+    public String label, name, date;
     public boolean fav, hide;
     public Drawable icon;
 
@@ -31,6 +39,12 @@ public class AppDetail implements Parcelable {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         fav = prefs.getBoolean(name + "-fav", false);
         hide = prefs.getBoolean(name + "-hide", false);
+        date = prefs.getString(name + "-date", name);
+    }
+
+    public Intent getIntent(Context context, PackageManager manager) {
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putString(name + "-date", DateFormat.format(DATE_FORMAT, Calendar.getInstance().getTime()).toString()).apply();
+        return manager.getLaunchIntentForPackage(name);
     }
 
     public void setFav(Context context, boolean fav) {

@@ -7,11 +7,11 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/felix"
-        android:label="Felix Launcher"
+        android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
             android:name=".activities.LauncherActivity"
-            android:label="Felix Launcher"
+            android:label="@null"
             android:launchMode="singleTask"
             android:stateNotNeeded="true"
             android:screenOrientation="portrait">
@@ -25,7 +25,7 @@
 
         <activity
             android:name=".activities.SettingsActivity"
-            android:label="Settings"
+            android:label="@string/settings"
             android:theme="@style/Theme.AppCompat"
             android:parentActivityName="com.james.felixlauncher.activities.LauncherActivity">
             <meta-data
@@ -36,7 +36,7 @@
 
         <activity
             android:name=".activities.HiddenActivity"
-            android:label="Hidden Apps"
+            android:label="@string/hidden_apps"
             android:theme="@style/Theme.AppCompat"
             android:parentActivityName="com.james.felixlauncher.activities.LauncherActivity">
             <meta-data

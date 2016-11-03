@@ -36,8 +36,8 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="About the app"
-                        android:textSize="20dp"
+                        android:text="@string/about"
+                        android:textSize="20sp"
                         android:paddingTop="12dp"
                         android:paddingBottom="12dp"
                         android:paddingLeft="16dp"
@@ -48,7 +48,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="This app is designed to extend the battery life of a device by using the smallest, least power-hogging setup possible while still providing a quick and easy way to open apps and not completely sacrificing design. This app is 6.3 megabytes. Compared to most other home screens that implement extensive theming options, this could dramatically increase the overall battery life and performance of a phone."
+                        android:text="@string/app_desc"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
                         android:layout_marginTop="12dp"
@@ -62,7 +62,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/darktext"
-                android:text="Dark Text"
+                android:text="@string/dark_text"
                 android:checked="@{SettingsActivity.isTextDark(context)}"
                 android:padding="16dp" />
 
@@ -70,7 +70,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/wallpaper"
-                android:text="Show Wallpaper"
+                android:text="@string/show_wallpaper"
                 android:checked="@{SettingsActivity.isWallpaper(context)}"
                 android:padding="16dp" />
 
@@ -78,7 +78,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:id="@+id/setwallpaper"
-                android:text="Set Wallpaper"
+                android:text="@string/set_wallpaper"
                 android:gravity="center_vertical"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"

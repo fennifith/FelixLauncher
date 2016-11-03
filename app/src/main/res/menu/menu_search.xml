@@ -1,21 +1,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/action_search"
         android:iconifiedByDefault="true"
-        android:title="Enter search query..."
+        android:title="@string/search_hint"
         android:icon="@drawable/ic_search"
         android:visible="true"
         app:actionViewClass="android.support.v7.widget.SearchView"
         app:showAsAction="ifRoom"/>
 
     <item android:id="@+id/action_settings"
-        android:title="Settings"
+        android:title="@string/settings"
         app:showAsAction="never" />
 
     <item android:id="@+id/action_hidden"
-        android:title="Hidden Apps"
+        android:title="@string/hidden_apps"
         app:showAsAction="never" />
 </menu>

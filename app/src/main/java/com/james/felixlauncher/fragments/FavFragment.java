@@ -36,13 +36,10 @@ public class FavFragment extends Fragment {
         progress = (ProgressBar) rootView.findViewById(R.id.progressBar);
         progress.setVisibility(View.VISIBLE);
 
-        manager = getContext().getPackageManager();
-        list = new ArrayList<>();
-
         RecyclerView recycler = (RecyclerView) rootView.findViewById(R.id.recycler);
         recycler.setLayoutManager(new GridLayoutManager(getContext(), 3));
 
-        adapter = new AppDetailAdapter(getActivity(), manager, list);
+        adapter = new AppDetailAdapter(getActivity(), getPackageManager(), getAppList());
         adapter.setListener(new AppDetailAdapter.Listener() {
             @Override
             public void onChange() {
@@ -58,23 +55,34 @@ public class FavFragment extends Fragment {
         return rootView;
     }
 
+    private List<AppDetail> getAppList() {
+        if (list == null) list = new ArrayList<>();
+        return list;
+    }
+
+    private PackageManager getPackageManager() {
+        if (manager == null) manager = getContext().getPackageManager();
+        return manager;
+    }
+
     public void load() {
         if (t != null && t.isAlive()) t.interrupt();
-        list.clear();
+        getAppList().clear();
 
         t = new Thread() {
             @Override
             public void run() {
-                List<ResolveInfo> availableActivities = manager.queryIntentActivities(new Intent(Intent.ACTION_MAIN, null).addCategory(Intent.CATEGORY_LAUNCHER), 0);
+                List<ResolveInfo> availableActivities = getPackageManager().queryIntentActivities(new Intent(Intent.ACTION_MAIN, null).addCategory(Intent.CATEGORY_LAUNCHER), 0);
                 for (ResolveInfo ri : availableActivities) {
-                    AppDetail app = new AppDetail(getContext(), ri.loadLabel(manager).toString(), ri.activityInfo.packageName);
-                    if (app.fav && !app.hide) list.add(app);
+                    AppDetail app = new AppDetail(getContext(), ri.loadLabel(getPackageManager()).toString(), ri.activityInfo.packageName);
+                    if (app.fav && !app.hide) getAppList().add(app);
                 }
 
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (adapter.getList().size() != list.size()) adapter.setList(list);
+                        if (adapter.getList().size() != getAppList().size())
+                            adapter.setList(getAppList());
                         progress.setVisibility(View.GONE);
                     }
                 });

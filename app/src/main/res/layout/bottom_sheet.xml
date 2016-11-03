@@ -3,7 +3,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingBottom="8dp"
-    android:background="#fff">
+    android:background="@android:color/white">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -15,7 +15,7 @@
         <com.james.felixlauncher.views.SquareImageView
             android:layout_width="36dp"
             android:layout_height="36dp"
-            android:src="#bdbdbd"
+            android:src="@color/colorIcon"
             android:id="@+id/icon"
             android:layout_gravity="center_vertical"
             android:layout_marginRight="18dp" />
@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:text="App Name"
             android:id="@+id/title"
-            android:textColor="#DE000000"
+            android:textColor="@color/textColorPrimaryDark"
             android:textSize="20sp"
             android:layout_gravity="center_vertical" />
 
@@ -46,18 +46,18 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_gravity="center_vertical"
-            android:tint="#61000000"
+            android:tint="@color/colorIconTransparent"
             android:tintMode="src_in" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Add to Favorites"
+            android:text="@string/add_favorites"
             android:textSize="16sp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:gravity="center_vertical"
-            android:textColor="#8A000000"
+            android:textColor="@color/textColorSecondaryDark"
             android:textIsSelectable="false"
             android:id="@+id/fav_text" />
 
@@ -78,18 +78,18 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_gravity="center_vertical"
-            android:tint="#61000000"
+            android:tint="@color/colorIconTransparent"
             android:tintMode="src_in" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Set Hidden"
+            android:text="@string/set_hidden"
             android:textSize="16sp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:gravity="center_vertical"
-            android:textColor="#8A000000"
+            android:textColor="@color/textColorSecondaryDark"
             android:textIsSelectable="false"
             android:id="@+id/hide_text" />
 
@@ -110,18 +110,18 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_gravity="center_vertical"
-            android:tint="#61000000"
+            android:tint="@color/colorIconTransparent"
             android:tintMode="src_in" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Open in Play Store"
+            android:text="@string/play_store"
             android:textSize="16sp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:gravity="center_vertical"
-            android:textColor="#8A000000"
+            android:textColor="@color/textColorSecondaryDark"
             android:textIsSelectable="false" />
 
     </LinearLayout>
@@ -141,18 +141,18 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_gravity="center_vertical"
-            android:tint="#61000000"
+            android:tint="@color/colorIconTransparent"
             android:tintMode="src_in" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Settings"
+            android:text="@string/settings"
             android:textSize="16sp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:gravity="center_vertical"
-            android:textColor="#8A000000"
+            android:textColor="@color/textColorSecondaryDark"
             android:textIsSelectable="false" />
 
     </LinearLayout>
