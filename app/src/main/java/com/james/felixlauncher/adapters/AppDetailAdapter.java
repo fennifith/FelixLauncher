@@ -21,10 +21,13 @@ import com.james.felixlauncher.activities.SettingsActivity;
 import com.james.felixlauncher.data.AppDetail;
 import com.james.felixlauncher.views.SquareImageView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 public class AppDetailAdapter extends RecyclerView.Adapter<AppDetailAdapter.ViewHolder> {
 
@@ -47,7 +50,15 @@ public class AppDetailAdapter extends RecyclerView.Adapter<AppDetailAdapter.View
 
         Collections.sort(filteredList, new Comparator<AppDetail>() {
             public int compare(AppDetail v1, AppDetail v2) {
-                return v1.label.compareTo(v2.label);
+                SimpleDateFormat format = new SimpleDateFormat(AppDetail.DATE_FORMAT, Locale.getDefault());
+                if (v1.date != null && v2.date != null) {
+                    try {
+                        return format.parse(v1.date).compareTo(format.parse(v2.date));
+                    } catch (ParseException ignored) {
+                    }
+                }
+
+                return v1.name.compareTo(v2.name);
             }
         });
     }
@@ -73,7 +84,15 @@ public class AppDetailAdapter extends RecyclerView.Adapter<AppDetailAdapter.View
 
         Collections.sort(filteredList, new Comparator<AppDetail>() {
             public int compare(AppDetail v1, AppDetail v2) {
-                return v1.date.compareTo(v2.date);
+                SimpleDateFormat format = new SimpleDateFormat(AppDetail.DATE_FORMAT, Locale.getDefault());
+                if (v1.date != null && v2.date != null) {
+                    try {
+                        return format.parse(v1.date).compareTo(format.parse(v2.date));
+                    } catch (ParseException ignored) {
+                    }
+                }
+
+                return v1.name.compareTo(v2.name);
             }
         });
 
@@ -97,17 +116,20 @@ public class AppDetailAdapter extends RecyclerView.Adapter<AppDetailAdapter.View
     public void onBindViewHolder(final AppDetailAdapter.ViewHolder holder, int position) {
         if (holder.t != null && holder.t.isAlive()) holder.t.interrupt();
 
+        AppDetail app = filteredList.get(position);
+
         holder.v.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
 
         TextView title = (TextView) holder.v.findViewById(R.id.name);
-        title.setText(filteredList.get(position).label);
+        title.setText(app.label);
         title.setTextColor(SettingsActivity.getPrimaryTextColor(activity));
 
         TextView subtitle = (TextView) holder.v.findViewById(R.id.extra);
-        subtitle.setText(filteredList.get(position).date);
+        subtitle.setText(app.date != null ? app.date : app.name);
         subtitle.setTextColor(SettingsActivity.getSecondaryTextColor(activity));
 
-        if (filteredList.get(holder.getAdapterPosition()).icon != null) ((SquareImageView) holder.v.findViewById(R.id.image)).setImageDrawable(filteredList.get(holder.getAdapterPosition()).icon);
+        if (app.icon != null)
+            ((SquareImageView) holder.v.findViewById(R.id.image)).setImageDrawable(app.icon);
         else {
             holder.t = new Thread() {
                 @Override

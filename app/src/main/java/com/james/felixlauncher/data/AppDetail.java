@@ -14,7 +14,7 @@ import java.util.Calendar;
 
 public class AppDetail implements Parcelable {
 
-    private static final String DATE_FORMAT = "h:mm • EEEE MMMM d, yyyy";
+    public static final String DATE_FORMAT = "kk:mm • EEEE MMMM d, yyyy";
 
     public static final Creator<AppDetail> CREATOR = new Creator<AppDetail>() {
         @Override
@@ -39,7 +39,7 @@ public class AppDetail implements Parcelable {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         fav = prefs.getBoolean(name + "-fav", false);
         hide = prefs.getBoolean(name + "-hide", false);
-        date = prefs.getString(name + "-date", name);
+        date = prefs.getString(name + "-date", null);
     }
 
     public Intent getIntent(Context context, PackageManager manager) {
