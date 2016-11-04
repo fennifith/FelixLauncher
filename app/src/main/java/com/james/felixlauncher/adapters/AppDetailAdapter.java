@@ -49,16 +49,24 @@ public class AppDetailAdapter extends RecyclerView.Adapter<AppDetailAdapter.View
         filteredList.addAll(list);
 
         Collections.sort(filteredList, new Comparator<AppDetail>() {
-            public int compare(AppDetail v1, AppDetail v2) {
+            @Override
+            public int compare(AppDetail t1, AppDetail t2) {
+                return t1.label.compareToIgnoreCase(t2.label);
+            }
+        });
+
+        Collections.sort(filteredList, new Comparator<AppDetail>() {
+            @Override
+            public int compare(AppDetail t1, AppDetail t2) {
                 SimpleDateFormat format = new SimpleDateFormat(AppDetail.DATE_FORMAT, Locale.getDefault());
-                if (v1.date != null && v2.date != null) {
+                if (t1.date != null && t2.date != null) {
                     try {
-                        return format.parse(v1.date).compareTo(format.parse(v2.date));
+                        return format.parse(t1.date).compareTo(format.parse(t2.date));
                     } catch (ParseException ignored) {
                     }
                 }
 
-                return v1.name.compareTo(v2.name);
+                return 0;
             }
         });
     }
@@ -83,16 +91,24 @@ public class AppDetailAdapter extends RecyclerView.Adapter<AppDetailAdapter.View
         filteredList.addAll(list);
 
         Collections.sort(filteredList, new Comparator<AppDetail>() {
-            public int compare(AppDetail v1, AppDetail v2) {
+            @Override
+            public int compare(AppDetail t1, AppDetail t2) {
+                return t1.label.compareToIgnoreCase(t2.label);
+            }
+        });
+
+        Collections.sort(filteredList, new Comparator<AppDetail>() {
+            @Override
+            public int compare(AppDetail t1, AppDetail t2) {
                 SimpleDateFormat format = new SimpleDateFormat(AppDetail.DATE_FORMAT, Locale.getDefault());
-                if (v1.date != null && v2.date != null) {
+                if (t1.date != null && t2.date != null) {
                     try {
-                        return format.parse(v1.date).compareTo(format.parse(v2.date));
+                        return format.parse(t1.date).compareTo(format.parse(t2.date));
                     } catch (ParseException ignored) {
                     }
                 }
 
-                return v1.name.compareTo(v2.name);
+                return 0;
             }
         });
 
