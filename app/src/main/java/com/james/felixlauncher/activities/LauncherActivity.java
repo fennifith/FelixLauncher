@@ -1,8 +1,13 @@
 package com.james.felixlauncher.activities;
 
+import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.graphics.Color;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -21,15 +26,22 @@ import android.widget.TextView;
 import com.james.felixlauncher.R;
 import com.james.felixlauncher.adapters.PagerAdapter;
 
-public class LauncherActivity extends AppCompatActivity {
+public class LauncherActivity extends AppCompatActivity implements SensorEventListener {
 
-    Toolbar toolbar;
-    ViewPager viewPager;
-    PagerAdapter adapter;
-    View clock, apps, fav;
-    ImageView clockImage, appsImage, favImage;
-    TextView clockText, appsText, favText;
-    int primary, accent;
+    private Toolbar toolbar;
+    private ViewPager viewPager;
+    private PagerAdapter adapter;
+    private View clock, apps, fav;
+    private ImageView clockImage, appsImage, favImage;
+    private TextView clockText, appsText, favText;
+    private View coordinator;
+    private int primary, accent;
+
+    private SensorManager sensorManager;
+    private Sensor sensor;
+
+    private ValueAnimator animator;
+    private int color, oldColor, newColor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +51,8 @@ public class LauncherActivity extends AppCompatActivity {
         clock = findViewById(R.id.clock);
         apps = findViewById(R.id.apps);
         fav = findViewById(R.id.fav);
+
+        coordinator = findViewById(R.id.coordinator);
 
         clockImage = (ImageView) findViewById(R.id.clockImage);
         appsImage = (ImageView) findViewById(R.id.appsImage);
@@ -125,6 +139,9 @@ public class LauncherActivity extends AppCompatActivity {
                 viewPager.setCurrentItem(2);
             }
         });
+
+        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
     }
 
     private void animateText(final int end, final TextView textView) {
@@ -189,22 +206,59 @@ public class LauncherActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        View coordinator = findViewById(R.id.coordinator);
         if (coordinator != null) {
             if (SettingsActivity.isWallpaper(this)) {
-                coordinator.setBackgroundColor(Color.TRANSPARENT);
+                color = Color.argb(0, 0, 0, 0);
+                coordinator.setBackgroundColor(color);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.colorOverlayDark));
                 }
             } else {
-                coordinator.setBackgroundColor(ContextCompat.getColor(this, R.color.colorBackground));
+                color = ContextCompat.getColor(this, R.color.colorBackground);
+                coordinator.setBackgroundColor(color);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
                 }
             }
         }
 
+        oldColor = color;
+
         if (adapter != null && viewPager != null)
             adapter.onPageChange(viewPager.getCurrentItem());
+
+        if (sensorManager != null && sensor != null)
+            sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_UI);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (sensorManager != null)
+            sensorManager.unregisterListener(this);
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent sensorEvent) {
+        int light = (int) sensorEvent.values[0] / 100;
+        newColor = Color.argb(Color.alpha(color) + Math.abs(light - 100), Color.red(color) + light, Color.green(color) + light, Color.blue(color) + light);
+
+        if (animator != null) animator.cancel();
+
+        animator = ValueAnimator.ofObject(new ArgbEvaluator(), oldColor, newColor);
+        animator.setDuration(500);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                oldColor = (int) valueAnimator.getAnimatedValue();
+                if (coordinator != null) coordinator.setBackgroundColor(oldColor);
+            }
+        });
+        animator.start();
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i) {
+
     }
 }

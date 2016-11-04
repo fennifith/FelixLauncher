@@ -11,8 +11,8 @@
     <color name="textColorSecondaryDark">#8A000000</color>
 
     <color name="colorBackground">#303030</color>
-    <color name="colorOverlay">#8A000000</color>
-    <color name="colorOverlayDark">#B3000000</color>
+    <color name="colorOverlay">#42000000</color>
+    <color name="colorOverlayDark">#8A000000</color>
     <color name="colorIcon">#BDBDBD</color>
     <color name="colorIconTransparent">#61000000</color>
 </resources>
