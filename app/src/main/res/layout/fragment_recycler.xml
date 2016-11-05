@@ -8,7 +8,7 @@
         android:layout_height="wrap_content"
         android:scrollbars="vertical"
         android:requiresFadingEdge="horizontal|vertical"
-        android:fadingEdgeLength="24dp" />
+        android:fadingEdgeLength="12dp" />
 
     <ProgressBar
         android:id="@+id/progressBar"

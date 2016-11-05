@@ -25,6 +25,7 @@ import android.widget.TextView;
 
 import com.james.felixlauncher.R;
 import com.james.felixlauncher.adapters.PagerAdapter;
+import com.james.felixlauncher.utils.ImageUtils;
 
 public class LauncherActivity extends AppCompatActivity implements SensorEventListener {
 
@@ -210,15 +211,14 @@ public class LauncherActivity extends AppCompatActivity implements SensorEventLi
             if (SettingsActivity.isWallpaper(this)) {
                 color = Color.argb(0, 0, 0, 0);
                 coordinator.setBackgroundColor(color);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.colorOverlayDark));
-                }
             } else {
                 color = ContextCompat.getColor(this, R.color.colorBackground);
                 coordinator.setBackgroundColor(color);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
-                }
+            }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                getWindow().setStatusBarColor(ImageUtils.darkColor(color));
+                getWindow().setNavigationBarColor(ImageUtils.darkColor(color));
             }
         }
 
@@ -250,7 +250,13 @@ public class LauncherActivity extends AppCompatActivity implements SensorEventLi
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 oldColor = (int) valueAnimator.getAnimatedValue();
-                if (coordinator != null) coordinator.setBackgroundColor(oldColor);
+                if (coordinator != null) {
+                    coordinator.setBackgroundColor(oldColor);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        getWindow().setStatusBarColor(ImageUtils.darkColor(oldColor));
+                        getWindow().setNavigationBarColor(ImageUtils.darkColor(oldColor));
+                    }
+                }
             }
         });
         animator.start();

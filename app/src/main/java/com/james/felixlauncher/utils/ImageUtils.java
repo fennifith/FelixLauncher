@@ -28,4 +28,8 @@ public class ImageUtils {
 
         return bitmap;
     }
+
+    public static int darkColor(int color) {
+        return Color.argb(Color.alpha(color) + 70, Color.red(color), Color.green(color), Color.blue(color));
+    }
 }
