@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.ColorInt;
 import android.support.graphics.drawable.VectorDrawableCompat;
 
 public class ImageUtils {
@@ -29,7 +30,8 @@ public class ImageUtils {
         return bitmap;
     }
 
-    public static int darkColor(int color) {
-        return Color.argb(Color.alpha(color) + 70, Color.red(color), Color.green(color), Color.blue(color));
+    @ColorInt
+    public static int alpha(@ColorInt int color, float alpha) {
+        return Color.argb(Math.round(Color.alpha(color) * alpha), Color.red(color), Color.green(color), Color.blue(color));
     }
 }

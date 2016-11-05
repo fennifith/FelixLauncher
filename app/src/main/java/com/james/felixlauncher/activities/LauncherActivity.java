@@ -208,17 +208,12 @@ public class LauncherActivity extends AppCompatActivity implements SensorEventLi
         super.onResume();
 
         if (coordinator != null) {
-            if (SettingsActivity.isWallpaper(this)) {
-                color = Color.argb(0, 0, 0, 0);
-                coordinator.setBackgroundColor(color);
-            } else {
-                color = ContextCompat.getColor(this, R.color.colorBackground);
-                coordinator.setBackgroundColor(color);
-            }
+            color = Color.argb(0, 0, 0, 0);
+            coordinator.setBackgroundColor(color);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                getWindow().setStatusBarColor(ImageUtils.darkColor(color));
-                getWindow().setNavigationBarColor(ImageUtils.darkColor(color));
+                getWindow().setStatusBarColor(ImageUtils.alpha(color, 1.5f));
+                getWindow().setNavigationBarColor(ImageUtils.alpha(color, 1.5f));
             }
         }
 
@@ -253,8 +248,8 @@ public class LauncherActivity extends AppCompatActivity implements SensorEventLi
                 if (coordinator != null) {
                     coordinator.setBackgroundColor(oldColor);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        getWindow().setStatusBarColor(ImageUtils.darkColor(oldColor));
-                        getWindow().setNavigationBarColor(ImageUtils.darkColor(oldColor));
+                        getWindow().setStatusBarColor(ImageUtils.alpha(oldColor, 1.5f));
+                        getWindow().setNavigationBarColor(ImageUtils.alpha(oldColor, 1.5f));
                     }
                 }
             }

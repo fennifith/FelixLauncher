@@ -29,6 +29,7 @@ public class FavFragment extends CustomFragment implements Felix.AppsChangedList
         View rootView = inflater.inflate(R.layout.fragment_recycler, container, false);
 
         felix = (Felix) getContext().getApplicationContext();
+        felix.addListener(this);
 
         progress = (ProgressBar) rootView.findViewById(R.id.progressBar);
         progress.setVisibility(View.VISIBLE);
@@ -48,6 +49,12 @@ public class FavFragment extends CustomFragment implements Felix.AppsChangedList
         recycler.setAdapter(adapter);
 
         return rootView;
+    }
+
+    @Override
+    public void onDestroy() {
+        felix.removeListener(this);
+        super.onDestroy();
     }
 
     @Override

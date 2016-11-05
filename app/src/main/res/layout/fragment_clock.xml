@@ -11,7 +11,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:orientation="vertical"
-        android:gravity="center">
+        android:gravity="center"
+        android:animateLayoutChanges="true">
 
         <LinearLayout
             android:orientation="horizontal"
@@ -28,7 +29,8 @@
                 android:layout_gravity="center_vertical"
                 android:textColor="?android:textColorPrimary"
                 android:textSize="64sp"
-                android:layout_margin="8dp" />
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -38,7 +40,7 @@
                 android:layout_gravity="bottom"
                 android:textColor="?android:textColorSecondary"
                 android:textSize="24sp"
-                android:layout_margin="6dp" />
+                android:layout_margin="4dp" />
 
         </LinearLayout>
 
@@ -53,90 +55,101 @@
             android:layout_gravity="center_horizontal"
             android:textIsSelectable="false" />
 
-        <LinearLayout
+        <android.support.v7.widget.CardView
+            android:id="@+id/weather"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="12dp"
-            android:animateLayoutChanges="true">
+            android:layout_margin="12dp"
+            app:cardUseCompatPadding="true"
+            app:cardBackgroundColor="@android:color/white"
+            android:visibility="gone">
 
-            <android.support.v7.widget.CardView
-                android:id="@+id/weather"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:id="@+id/weatherButton"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_margin="4dp"
-                android:visibility="gone"
-                app:cardUseCompatPadding="true"
-                app:cardBackgroundColor="@color/colorAccent">
+                android:background="?attr/selectableItemBackground"
+                android:gravity="center_vertical">
+
+                <com.james.felixlauncher.views.SquareImageView
+                    android:id="@+id/weatherImage"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:scaleType="center"
+                    android:background="@color/colorAccent"
+                    android:tint="@color/textColorPrimaryDark"
+                    android:layout_gravity="center_horizontal"
+                    app:srcCompat="@drawable/ic_sun" />
 
                 <LinearLayout
-                    android:id="@+id/weatherButton"
-                    android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackground"
-                    android:padding="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:orientation="vertical"
                     android:gravity="center_vertical">
-
-                    <com.james.felixlauncher.views.SquareImageView
-                        android:id="@+id/weatherImage"
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
-                        android:scaleType="center"
-                        android:tint="@color/textColorPrimaryDark"
-                        android:layout_gravity="center_horizontal"
-                        app:srcCompat="@drawable/ic_sun" />
 
                     <TextView
                         android:id="@+id/weatherText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/weather_clear"
-                        android:layout_gravity="center_horizontal|bottom"
-                        android:textColor="@color/textColorSecondaryDark" />
-
-                </LinearLayout>
-
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_margin="4dp"
-                app:cardUseCompatPadding="true"
-                app:cardBackgroundColor="@color/colorAccent">
-
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackground"
-                    android:padding="16dp"
-                    android:gravity="center_vertical"
-                    android:id="@+id/alarm">
-
-                    <com.james.felixlauncher.views.SquareImageView
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
-                        android:scaleType="center"
-                        android:tint="@color/textColorPrimaryDark"
-                        android:layout_gravity="center_horizontal"
-                        app:srcCompat="@drawable/ic_clock" />
+                        android:text="@string/set_alarm"
+                        android:layout_gravity="center_vertical"
+                        android:textColor="@color/textColorPrimaryDark"
+                        android:textSize="16sp" />
 
                     <TextView
+                        android:id="@+id/temperature"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/set_alarm"
-                        android:layout_gravity="center_horizontal|bottom"
+                        android:text="@string/temperature"
+                        android:layout_gravity="center_vertical"
                         android:textColor="@color/textColorSecondaryDark" />
 
                 </LinearLayout>
 
-            </android.support.v7.widget.CardView>
+            </LinearLayout>
 
-        </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp"
+            app:cardUseCompatPadding="true"
+            app:cardBackgroundColor="@android:color/white">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:gravity="center_vertical"
+                android:id="@+id/alarm">
+
+                <com.james.felixlauncher.views.SquareImageView
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:scaleType="center"
+                    android:background="@color/colorAccent"
+                    android:tint="@color/textColorPrimaryDark"
+                    android:layout_gravity="center_horizontal"
+                    app:srcCompat="@drawable/ic_clock" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:text="@string/set_alarm"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="@color/textColorPrimaryDark"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
 
     </LinearLayout>
 

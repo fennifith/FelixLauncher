@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.awareness.snapshot.WeatherResult;
+import com.google.android.gms.awareness.state.Weather;
 import com.google.android.gms.common.api.ResultCallback;
 import com.james.felixlauncher.Felix;
 import com.james.felixlauncher.R;
@@ -39,7 +40,7 @@ public class ClockFragment extends CustomFragment {
 
     private View weather;
     private SquareImageView weatherImage;
-    private TextView weatherText;
+    private TextView weatherText, weatherTemperature;
 
     @Nullable
     @Override
@@ -53,6 +54,7 @@ public class ClockFragment extends CustomFragment {
         weather = rootView.findViewById(R.id.weather);
         weatherImage = (SquareImageView) rootView.findViewById(R.id.weatherImage);
         weatherText = (TextView) rootView.findViewById(R.id.weatherText);
+        weatherTemperature = (TextView) rootView.findViewById(R.id.temperature);
 
         clockFormat = new SimpleDateFormat(FORMAT_CLOCK, Locale.getDefault());
         timeFormat = new SimpleDateFormat(FORMAT_TIME, Locale.getDefault());
@@ -109,10 +111,13 @@ public class ClockFragment extends CustomFragment {
             @Override
             public void onResult(@NonNull WeatherResult weatherResult) {
                 if (weatherResult.getStatus().isSuccess() && weatherImage != null && weatherText != null) {
-                    WeatherCondition condition = new WeatherCondition(weatherResult.getWeather().getConditions()[0]);
+                    Weather weather = weatherResult.getWeather();
+
+                    WeatherCondition condition = new WeatherCondition(weather.getConditions()[0]);
                     weatherImage.setImageResource(condition.getDrawable());
                     weatherText.setText(condition.getTitle(getContext()));
-                    weather.setVisibility(View.VISIBLE);
+                    weatherTemperature.setText(String.format(getString(R.string.temperature), weather.getTemperature(Weather.CELSIUS), weather.getTemperature(Weather.FAHRENHEIT)));
+                    ClockFragment.this.weather.setVisibility(View.VISIBLE);
                 } else {
                     if (weather != null) {
                         weather.setVisibility(View.GONE);
