@@ -4,25 +4,42 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.AlarmClock;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.awareness.snapshot.WeatherResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.james.felixlauncher.Felix;
 import com.james.felixlauncher.R;
+import com.james.felixlauncher.data.WeatherCondition;
+import com.james.felixlauncher.views.SquareImageView;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
-public class ClockFragment extends Fragment {
+public class ClockFragment extends CustomFragment {
 
-    TextView clock, time, date;
-    BroadcastReceiver receiver;
-    SimpleDateFormat clockFormat, timeFormat, dateFormat;
+    private static final String
+            FORMAT_CLOCK = "kk:mm",
+            FORMAT_TIME = "a",
+            FORMAT_DATE = "EEE, MMM d";
+
+    private TextView clock, time, date;
+    private BroadcastReceiver receiver;
+    private SimpleDateFormat clockFormat, timeFormat, dateFormat;
+
+    private View weather;
+    private SquareImageView weatherImage;
+    private TextView weatherText;
 
     @Nullable
     @Override
@@ -33,9 +50,13 @@ public class ClockFragment extends Fragment {
         time = (TextView) rootView.findViewById(R.id.time);
         date = (TextView) rootView.findViewById(R.id.date);
 
-        clockFormat = new SimpleDateFormat("HH:mm");
-        timeFormat = new SimpleDateFormat("a");
-        dateFormat = new SimpleDateFormat("EEE, MMM d");
+        weather = rootView.findViewById(R.id.weather);
+        weatherImage = (SquareImageView) rootView.findViewById(R.id.weatherImage);
+        weatherText = (TextView) rootView.findViewById(R.id.weatherText);
+
+        clockFormat = new SimpleDateFormat(FORMAT_CLOCK, Locale.getDefault());
+        timeFormat = new SimpleDateFormat(FORMAT_TIME, Locale.getDefault());
+        dateFormat = new SimpleDateFormat(FORMAT_DATE, Locale.getDefault());
 
         Date current = new Date();
         clock.setText(clockFormat.format(current));
@@ -63,6 +84,13 @@ public class ClockFragment extends Fragment {
             }
         });
 
+        rootView.findViewById(R.id.weatherButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/search?q=weather")));
+            }
+        });
+
         return rootView;
     }
 
@@ -70,5 +98,28 @@ public class ClockFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         if (receiver != null) getActivity().unregisterReceiver(receiver);
+    }
+
+    @Override
+    public void onSelect() {
+        Context context = getContext();
+        if (context == null) return;
+
+        ((Felix) context.getApplicationContext()).getWeather(new ResultCallback<WeatherResult>() {
+            @Override
+            public void onResult(@NonNull WeatherResult weatherResult) {
+                if (weatherResult.getStatus().isSuccess() && weatherImage != null && weatherText != null) {
+                    WeatherCondition condition = new WeatherCondition(weatherResult.getWeather().getConditions()[0]);
+                    weatherImage.setImageResource(condition.getDrawable());
+                    weatherText.setText(condition.getTitle(getContext()));
+                    weather.setVisibility(View.VISIBLE);
+                } else {
+                    if (weather != null) {
+                        weather.setVisibility(View.GONE);
+                        Toast.makeText(getContext(), R.string.weather_failed, Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
     }
 }

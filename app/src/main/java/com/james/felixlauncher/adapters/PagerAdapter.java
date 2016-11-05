@@ -1,13 +1,13 @@
 package com.james.felixlauncher.adapters;
 
 import android.content.Context;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.james.felixlauncher.R;
 import com.james.felixlauncher.fragments.AppsFragment;
 import com.james.felixlauncher.fragments.ClockFragment;
+import com.james.felixlauncher.fragments.CustomFragment;
 import com.james.felixlauncher.fragments.FavFragment;
 
 public class PagerAdapter extends FragmentStatePagerAdapter {
@@ -28,7 +28,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     }
 
     @Override
-    public Fragment getItem(int position) {
+    public CustomFragment getItem(int position) {
         switch (position) {
             case 0:
                 return clockFragment;
@@ -61,8 +61,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     }
 
     public void onPageChange(int position) {
-        if (position == 1) appsFragment.load();
-        else if (position == 2) favFragment.load();
+        getItem(position).onSelect();
     }
 
     public void search(String text) {

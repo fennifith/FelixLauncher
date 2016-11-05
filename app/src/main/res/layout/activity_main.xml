@@ -12,7 +12,7 @@
         android:layout_height="?attr/actionBarSize"
         android:background="@color/colorOverlay"
         android:id="@+id/toolbar"
-        app:title="" />
+        app:title="@string/home" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"
@@ -40,11 +40,11 @@
             <com.james.felixlauncher.views.SquareImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/ic_clock"
                 android:scaleType="center"
                 android:id="@+id/clockImage"
                 android:tint="?android:textColorSecondary"
-                android:layout_gravity="center_horizontal" />
+                android:layout_gravity="center_horizontal"
+                app:srcCompat="@drawable/ic_clock" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -68,11 +68,11 @@
             <com.james.felixlauncher.views.SquareImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/ic_apps"
                 android:scaleType="center"
                 android:tint="@color/colorAccent"
                 android:id="@+id/appsImage"
-                android:layout_gravity="center_horizontal" />
+                android:layout_gravity="center_horizontal"
+                app:srcCompat="@drawable/ic_apps" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -95,11 +95,11 @@
             <com.james.felixlauncher.views.SquareImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/ic_fav"
                 android:scaleType="center"
                 android:id="@+id/favImage"
                 android:tint="?android:textColorSecondary"
-                android:layout_gravity="center_horizontal" />
+                android:layout_gravity="center_horizontal"
+                app:srcCompat="@drawable/ic_fav" />
 
             <TextView
                 android:layout_width="wrap_content"

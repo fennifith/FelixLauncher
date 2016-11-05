@@ -10,6 +10,7 @@ android {
         targetSdkVersion 25
         versionCode 6
         versionName "2.6"
+        vectorDrawables.useSupportLibrary = true
     }
 
     buildTypes {
@@ -31,4 +32,5 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:25.0.0'
     compile 'com.android.support:cardview-v7:25.0.0'
     compile 'com.android.support:design:25.0.0'
+    compile 'com.google.android.gms:play-services-awareness:9.8.0'
 }

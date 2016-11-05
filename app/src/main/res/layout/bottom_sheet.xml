@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingBottom="8dp"
     android:background="@android:color/white">
@@ -41,13 +43,13 @@
         <com.james.felixlauncher.views.SquareImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/ic_fav"
             android:scaleType="fitCenter"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_gravity="center_vertical"
             android:tint="@color/colorIconTransparent"
-            android:tintMode="src_in" />
+            android:tintMode="src_in"
+            app:srcCompat="@drawable/ic_fav" />
 
         <TextView
             android:layout_width="match_parent"
@@ -73,13 +75,13 @@
         <com.james.felixlauncher.views.SquareImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/ic_hide"
             android:scaleType="fitCenter"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_gravity="center_vertical"
             android:tint="@color/colorIconTransparent"
-            android:tintMode="src_in" />
+            android:tintMode="src_in"
+            app:srcCompat="@drawable/ic_hide" />
 
         <TextView
             android:layout_width="match_parent"
@@ -105,13 +107,13 @@
         <com.james.felixlauncher.views.SquareImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/ic_store"
             android:scaleType="fitCenter"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_gravity="center_vertical"
             android:tint="@color/colorIconTransparent"
-            android:tintMode="src_in" />
+            android:tintMode="src_in"
+            app:srcCompat="@drawable/ic_store" />
 
         <TextView
             android:layout_width="match_parent"
@@ -136,13 +138,13 @@
         <com.james.felixlauncher.views.SquareImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/ic_settings"
             android:scaleType="fitCenter"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_gravity="center_vertical"
             android:tint="@color/colorIconTransparent"
-            android:tintMode="src_in" />
+            android:tintMode="src_in"
+            app:srcCompat="@drawable/ic_settings" />
 
         <TextView
             android:layout_width="match_parent"

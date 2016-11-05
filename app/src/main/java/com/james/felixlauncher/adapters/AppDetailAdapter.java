@@ -124,7 +124,7 @@ public class AppDetailAdapter extends RecyclerView.Adapter<AppDetailAdapter.View
     @Override
     public AppDetailAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = inflater.inflate(grid ? R.layout.icon_item : R.layout.list_item, null);
+        View v = inflater.inflate(grid ? R.layout.item_icon : R.layout.item_list, null);
         return new ViewHolder(v);
     }
 
