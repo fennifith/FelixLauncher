@@ -43,7 +43,8 @@ public class AppDetail implements Parcelable {
     }
 
     public Intent getIntent(Context context, PackageManager manager) {
-        PreferenceManager.getDefaultSharedPreferences(context).edit().putString(name + "-date", DateFormat.format(DATE_FORMAT, Calendar.getInstance().getTime()).toString()).apply();
+        date = DateFormat.format(DATE_FORMAT, Calendar.getInstance().getTime()).toString();
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putString(name + "-date", date).apply();
         return manager.getLaunchIntentForPackage(name);
     }
 

@@ -46,6 +46,7 @@ public class Felix extends Application {
                 PackageManager manager = getPackageManager();
                 if (manager == null) return;
 
+                final List<AppDetail> apps = new ArrayList<>();
                 List<ResolveInfo> infos = manager.queryIntentActivities(new Intent(Intent.ACTION_MAIN, null).addCategory(Intent.CATEGORY_LAUNCHER), 0);
                 for (ResolveInfo info : infos) {
                     apps.add(new AppDetail(Felix.this, info.loadLabel(manager).toString(), info.activityInfo.packageName));
@@ -54,9 +55,8 @@ public class Felix extends Application {
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
-                        for (AppsChangedListener listener : listeners) {
-                            onAppsChanged();
-                        }
+                        Felix.this.apps = apps;
+                        onAppsChanged();
                     }
                 });
             }

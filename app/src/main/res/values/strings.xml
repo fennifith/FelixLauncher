@@ -29,4 +29,6 @@
     <string name="weather_stormy">Stormy</string>
     <string name="weather_windy">Windy</string>
     <string name="weather_failed">Couldn\'t get weather.</string>
+    <string name="favorites_remove">Remove from Favorites</string>
+    <string name="set_visible">Set Visible</string>
 </resources>

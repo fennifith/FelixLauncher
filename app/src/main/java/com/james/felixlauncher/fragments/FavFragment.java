@@ -12,6 +12,9 @@ import android.widget.ProgressBar;
 import com.james.felixlauncher.Felix;
 import com.james.felixlauncher.R;
 import com.james.felixlauncher.adapters.AppDetailAdapter;
+import com.james.felixlauncher.data.AppDetail;
+
+import java.util.List;
 
 public class FavFragment extends CustomFragment implements Felix.AppsChangedListener {
 
@@ -57,5 +60,10 @@ public class FavFragment extends CustomFragment implements Felix.AppsChangedList
 
     @Override
     public void onSelect() {
+        if (felix != null && adapter != null && progress != null) {
+            List<AppDetail> apps = felix.getFavorites();
+            if (apps.size() > 0) progress.setVisibility(View.GONE);
+            if (adapter.getList().size() != apps.size()) adapter.setList(apps);
+        }
     }
 }

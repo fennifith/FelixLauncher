@@ -187,8 +187,10 @@ public class AppDetailAdapter extends RecyclerView.Adapter<AppDetailAdapter.View
                 View sheet = activity.getLayoutInflater().inflate(R.layout.bottom_sheet, null);
 
                 AppDetail app = filteredList.get(holder.getAdapterPosition());
-                if (app.fav) ((TextView) sheet.findViewById(R.id.fav_text)).setText("Remove from Favorites");
-                if (app.hide) ((TextView) sheet.findViewById(R.id.hide_text)).setText("Set Visible");
+                if (app.fav)
+                    ((TextView) sheet.findViewById(R.id.fav_text)).setText(R.string.favorites_remove);
+                if (app.hide)
+                    ((TextView) sheet.findViewById(R.id.hide_text)).setText(R.string.set_visible);
 
                 if (app.icon != null) ((ImageView) sheet.findViewById(R.id.icon)).setImageDrawable(app.icon);
                 ((TextView) sheet.findViewById(R.id.title)).setText(app.label);
