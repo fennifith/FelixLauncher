@@ -29,10 +29,8 @@ import com.james.felixlauncher.utils.ImageUtils;
 
 public class LauncherActivity extends AppCompatActivity implements SensorEventListener {
 
-    private Toolbar toolbar;
     private ViewPager viewPager;
     private PagerAdapter adapter;
-    private View clock, apps, fav;
     private ImageView clockImage, appsImage, favImage;
     private TextView clockText, appsText, favText;
     private View coordinator;
@@ -42,32 +40,25 @@ public class LauncherActivity extends AppCompatActivity implements SensorEventLi
     private Sensor sensor;
 
     private ValueAnimator animator;
-    private int color, oldColor, newColor;
+    private int color;
+    private int oldColor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        clock = findViewById(R.id.clock);
-        apps = findViewById(R.id.apps);
-        fav = findViewById(R.id.fav);
-
         coordinator = findViewById(R.id.coordinator);
-
         clockImage = (ImageView) findViewById(R.id.clockImage);
         appsImage = (ImageView) findViewById(R.id.appsImage);
         favImage = (ImageView) findViewById(R.id.favImage);
-
         clockText = (TextView) findViewById(R.id.clockText);
         appsText = (TextView) findViewById(R.id.appsText);
         favText = (TextView) findViewById(R.id.favText);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
         primary = ContextCompat.getColor(this, android.R.color.secondary_text_dark);
-
         accent = ContextCompat.getColor(this, R.color.colorAccent);
 
         viewPager = (ViewPager) findViewById(R.id.pager);
@@ -120,21 +111,21 @@ public class LauncherActivity extends AppCompatActivity implements SensorEventLi
             }
         });
 
-        clock.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.clock).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 viewPager.setCurrentItem(0);
             }
         });
 
-        apps.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.apps).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 viewPager.setCurrentItem(1);
             }
         });
 
-        fav.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.fav).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 viewPager.setCurrentItem(2);
@@ -212,8 +203,8 @@ public class LauncherActivity extends AppCompatActivity implements SensorEventLi
             coordinator.setBackgroundColor(color);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                getWindow().setStatusBarColor(ImageUtils.alpha(color, 1.5f));
-                getWindow().setNavigationBarColor(ImageUtils.alpha(color, 1.5f));
+                getWindow().setStatusBarColor(ImageUtils.addAlpha(color, 70));
+                getWindow().setNavigationBarColor(ImageUtils.addAlpha(color, 70));
             }
         }
 
@@ -234,12 +225,10 @@ public class LauncherActivity extends AppCompatActivity implements SensorEventLi
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
-        int light = (int) sensorEvent.values[0] / 100;
-        newColor = Color.argb(Color.alpha(color) + Math.abs(light - 100), Color.red(color) + light, Color.green(color) + light, Color.blue(color) + light);
-
         if (animator != null) animator.cancel();
+        int light = (int) sensorEvent.values[0] / 100;
 
-        animator = ValueAnimator.ofObject(new ArgbEvaluator(), oldColor, newColor);
+        animator = ValueAnimator.ofObject(new ArgbEvaluator(), oldColor, Color.argb(Color.alpha(color) + Math.abs(light - 100), Color.red(color) + light, Color.green(color) + light, Color.blue(color) + light));
         animator.setDuration(500);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -248,8 +237,8 @@ public class LauncherActivity extends AppCompatActivity implements SensorEventLi
                 if (coordinator != null) {
                     coordinator.setBackgroundColor(oldColor);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        getWindow().setStatusBarColor(ImageUtils.alpha(oldColor, 1.5f));
-                        getWindow().setNavigationBarColor(ImageUtils.alpha(oldColor, 1.5f));
+                        getWindow().setStatusBarColor(ImageUtils.addAlpha(oldColor, 70));
+                        getWindow().setNavigationBarColor(ImageUtils.addAlpha(oldColor, 70));
                     }
                 }
             }

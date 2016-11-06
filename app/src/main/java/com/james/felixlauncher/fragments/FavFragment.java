@@ -32,7 +32,7 @@ public class FavFragment extends CustomFragment implements Felix.AppsChangedList
         felix.addListener(this);
 
         progress = (ProgressBar) rootView.findViewById(R.id.progressBar);
-        progress.setVisibility(View.VISIBLE);
+        if (felix.isLoading()) progress.setVisibility(View.VISIBLE);
 
         RecyclerView recycler = (RecyclerView) rootView.findViewById(R.id.recycler);
         recycler.setLayoutManager(new GridLayoutManager(getContext(), 3));

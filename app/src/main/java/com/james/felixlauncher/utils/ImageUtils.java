@@ -31,7 +31,12 @@ public class ImageUtils {
     }
 
     @ColorInt
-    public static int alpha(@ColorInt int color, float alpha) {
+    public static int scaleAlpha(@ColorInt int color, float alpha) {
         return Color.argb(Math.round(Color.alpha(color) * alpha), Color.red(color), Color.green(color), Color.blue(color));
+    }
+
+    @ColorInt
+    public static int addAlpha(@ColorInt int color, int alpha) {
+        return Color.argb(Math.round(Color.alpha(color) + alpha), Color.red(color), Color.green(color), Color.blue(color));
     }
 }

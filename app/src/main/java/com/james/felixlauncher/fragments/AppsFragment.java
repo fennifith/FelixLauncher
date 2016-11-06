@@ -32,7 +32,7 @@ public class AppsFragment extends CustomFragment implements Felix.AppsChangedLis
         felix.addListener(this);
 
         progress = (ProgressBar) rootView.findViewById(R.id.progressBar);
-        progress.setVisibility(View.VISIBLE);
+        if (felix.isLoading()) progress.setVisibility(View.VISIBLE);
 
         RecyclerView recycler = (RecyclerView) rootView.findViewById(R.id.recycler);
         recycler.setLayoutManager(new LinearLayoutManager(getContext()));

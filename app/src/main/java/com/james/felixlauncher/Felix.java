@@ -26,6 +26,7 @@ public class Felix extends Application {
     private GoogleApiClient client;
     private List<AppDetail> apps;
     private List<AppsChangedListener> listeners;
+    private boolean isLoading;
 
     @Override
     public void onCreate() {
@@ -38,8 +39,10 @@ public class Felix extends Application {
         loadApps();
     }
 
-    private void loadApps() {
+    public void loadApps() {
         apps.clear();
+        isLoading = true;
+
         new Thread() {
             @Override
             public void run() {
@@ -56,6 +59,7 @@ public class Felix extends Application {
                     @Override
                     public void run() {
                         Felix.this.apps = apps;
+                        isLoading = false;
                         onAppsChanged();
                     }
                 });
@@ -81,6 +85,10 @@ public class Felix extends Application {
     public void getHeadphoneState(ResultCallback<HeadphoneStateResult> callback) {
         if (client.isConnected())
             Awareness.SnapshotApi.getHeadphoneState(client).setResultCallback(callback);
+    }
+
+    public boolean isLoading() {
+        return isLoading;
     }
 
     public List<AppDetail> getApps() {

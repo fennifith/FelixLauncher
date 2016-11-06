@@ -46,6 +46,17 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.james.felixlauncher.activities.LauncherActivity" />
         </activity>
+
+        <receiver android:name=".receivers.InstallReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_INSTALL" />
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

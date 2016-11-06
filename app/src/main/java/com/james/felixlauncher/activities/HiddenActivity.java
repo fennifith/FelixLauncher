@@ -1,8 +1,5 @@
 package com.james.felixlauncher.activities;
 
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,70 +7,52 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import com.james.felixlauncher.Felix;
 import com.james.felixlauncher.R;
 import com.james.felixlauncher.adapters.AppDetailAdapter;
-import com.james.felixlauncher.data.AppDetail;
 
-import java.util.ArrayList;
-import java.util.List;
+public class HiddenActivity extends AppCompatActivity implements Felix.AppsChangedListener {
 
-public class HiddenActivity extends AppCompatActivity {
-
-    AppDetailAdapter adapter;
-    ArrayList<AppDetail> list;
-    ProgressBar progress;
-    PackageManager manager;
-    Thread t;
+    private AppDetailAdapter adapter;
+    private ProgressBar progress;
+    private Felix felix;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_recycler);
 
-        manager = getPackageManager();
-        list = new ArrayList<>();
+        felix = (Felix) getApplicationContext();
+        felix.addListener(this);
 
         progress = (ProgressBar) findViewById(R.id.progressBar);
-        progress.setVisibility(View.VISIBLE);
+        if (felix.isLoading()) progress.setVisibility(View.VISIBLE);
 
         RecyclerView recycler = (RecyclerView) findViewById(R.id.recycler);
         recycler.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new AppDetailAdapter(this, manager, list);
+        adapter = new AppDetailAdapter(this, getPackageManager(), felix.getHidden());
         adapter.setListener(new AppDetailAdapter.Listener() {
             @Override
             public void onChange() {
-                load();
+                if (felix != null) felix.onAppsChanged();
             }
         });
 
         recycler.setAdapter(adapter);
-
-        load();
     }
 
-    public void load() {
-        if (t != null && t.isAlive()) t.interrupt();
-        list.clear();
+    @Override
+    protected void onDestroy() {
+        felix.removeListener(this);
+        super.onDestroy();
+    }
 
-        t = new Thread() {
-            @Override
-            public void run() {
-                List<ResolveInfo> availableActivities = manager.queryIntentActivities(new Intent(Intent.ACTION_MAIN, null).addCategory(Intent.CATEGORY_LAUNCHER), 0);
-                for (ResolveInfo ri : availableActivities) {
-                    AppDetail app = new AppDetail(HiddenActivity.this, ri.loadLabel(manager).toString(), ri.activityInfo.packageName);
-                    if (app.hide) list.add(app);
-                }
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (adapter.getList().size() != list.size()) adapter.setList(list);
-                        progress.setVisibility(View.GONE);
-                    }
-                });
-            }
-        };
-        t.start();
+    @Override
+    public void onAppsChanged() {
+        if (felix != null && adapter != null && progress != null) {
+            adapter.setList(felix.getHidden());
+            progress.setVisibility(View.GONE);
+        }
     }
 }
