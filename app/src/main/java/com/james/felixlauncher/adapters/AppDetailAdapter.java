@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateFormat;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,13 +22,11 @@ import com.james.felixlauncher.activities.SettingsActivity;
 import com.james.felixlauncher.data.AppDetail;
 import com.james.felixlauncher.views.SquareImageView;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
 
 public class AppDetailAdapter extends RecyclerView.Adapter<AppDetailAdapter.ViewHolder> {
 
@@ -55,20 +54,7 @@ public class AppDetailAdapter extends RecyclerView.Adapter<AppDetailAdapter.View
             }
         });
 
-        Collections.sort(filteredList, new Comparator<AppDetail>() {
-            @Override
-            public int compare(AppDetail t1, AppDetail t2) {
-                SimpleDateFormat format = new SimpleDateFormat(AppDetail.DATE_FORMAT, Locale.getDefault());
-                if (t1.date != null && t2.date != null) {
-                    try {
-                        return format.parse(t1.date).compareTo(format.parse(t2.date));
-                    } catch (ParseException ignored) {
-                    }
-                }
-
-                return 0;
-            }
-        });
+        Collections.sort(filteredList, new TimeComparator());
     }
 
     public interface Listener {
@@ -97,20 +83,7 @@ public class AppDetailAdapter extends RecyclerView.Adapter<AppDetailAdapter.View
             }
         });
 
-        Collections.sort(filteredList, new Comparator<AppDetail>() {
-            @Override
-            public int compare(AppDetail t1, AppDetail t2) {
-                SimpleDateFormat format = new SimpleDateFormat(AppDetail.DATE_FORMAT, Locale.getDefault());
-                if (t1.date != null && t2.date != null) {
-                    try {
-                        return format.parse(t1.date).compareTo(format.parse(t2.date));
-                    } catch (ParseException ignored) {
-                    }
-                }
-
-                return 0;
-            }
-        });
+        Collections.sort(filteredList, new TimeComparator());
 
         notifyDataSetChanged();
     }
@@ -141,7 +114,7 @@ public class AppDetailAdapter extends RecyclerView.Adapter<AppDetailAdapter.View
         title.setTextColor(SettingsActivity.getPrimaryTextColor(activity));
 
         TextView subtitle = (TextView) holder.v.findViewById(R.id.extra);
-        subtitle.setText(app.date != null ? app.date : app.name);
+        subtitle.setText(app.getDescription());
         subtitle.setTextColor(SettingsActivity.getSecondaryTextColor(activity));
 
         if (app.icon != null)
@@ -285,13 +258,29 @@ public class AppDetailAdapter extends RecyclerView.Adapter<AppDetailAdapter.View
         return filteredList.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        public View v;
-        public Thread t;
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        View v;
+        Thread t;
 
-        public ViewHolder(View v) {
+        ViewHolder(View v) {
             super(v);
             this.v = v;
+        }
+    }
+
+    private class TimeComparator implements Comparator<AppDetail> {
+
+        private String time;
+
+        TimeComparator() {
+            time = DateFormat.format(AppDetail.TIME_FORMAT, Calendar.getInstance().getTime()).toString();
+        }
+
+        @Override
+        public int compare(AppDetail t1, AppDetail t2) {
+            if (t1.time != null && t2.time != null)
+                return t2.time.compareTo(time) - t1.time.compareTo(time);
+            else return 0;
         }
     }
 }

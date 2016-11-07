@@ -2,40 +2,66 @@ package com.james.felixlauncher;
 
 import android.Manifest;
 import android.app.Application;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 
 import com.google.android.gms.awareness.Awareness;
+import com.google.android.gms.awareness.fence.DetectedActivityFence;
+import com.google.android.gms.awareness.fence.FenceUpdateRequest;
+import com.google.android.gms.awareness.fence.HeadphoneFence;
+import com.google.android.gms.awareness.snapshot.DetectedActivityResult;
 import com.google.android.gms.awareness.snapshot.HeadphoneStateResult;
 import com.google.android.gms.awareness.snapshot.LocationResult;
 import com.google.android.gms.awareness.snapshot.PlacesResult;
 import com.google.android.gms.awareness.snapshot.WeatherResult;
+import com.google.android.gms.awareness.state.HeadphoneState;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.location.DetectedActivity;
 import com.james.felixlauncher.data.AppDetail;
+import com.james.felixlauncher.receivers.FenceReceiver;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
-public class Felix extends Application {
+public class Felix extends Application implements GoogleApiClient.ConnectionCallbacks {
 
     private GoogleApiClient client;
     private List<AppDetail> apps;
     private List<AppsChangedListener> listeners;
+    private List<ActivityChangedListener> activityListeners;
     private boolean isLoading;
+
+    private String activityKey;
+    private boolean isHeadphones;
+    private PendingIntent intent;
 
     @Override
     public void onCreate() {
         super.onCreate();
+
+        intent = PendingIntent.getBroadcast(this, 0, new Intent(FenceReceiver.ACTION_FENCE_RECEIVER), 0);
+        registerReceiver(new FenceReceiver(this), new IntentFilter(FenceReceiver.ACTION_FENCE_RECEIVER));
+
         client = new GoogleApiClient.Builder(this).addApi(Awareness.API).build();
+        client.registerConnectionCallbacks(this);
         client.connect();
 
         apps = new ArrayList<>();
         listeners = new ArrayList<>();
+        activityListeners = new ArrayList<>();
         loadApps();
     }
 
@@ -82,13 +108,39 @@ public class Felix extends Application {
             Awareness.SnapshotApi.getPlaces(client).setResultCallback(callback);
     }
 
-    public void getHeadphoneState(ResultCallback<HeadphoneStateResult> callback) {
-        if (client.isConnected())
-            Awareness.SnapshotApi.getHeadphoneState(client).setResultCallback(callback);
+    public boolean isHeadphones() {
+        return isHeadphones;
+    }
+
+    public void setHeadphones(boolean isHeadphones) {
+        this.isHeadphones = isHeadphones;
+        onActivityChanged();
+    }
+
+    public String getActivityKey() {
+        return activityKey;
+    }
+
+    public void setActivityKey(String activityKey) {
+        this.activityKey = activityKey;
+        onActivityChanged();
     }
 
     public boolean isLoading() {
         return isLoading;
+    }
+
+    private void onActivityChanged() {
+        for (ActivityChangedListener listener : activityListeners) {
+            listener.onActivityChanged();
+        }
+    }
+
+    public List<AppDetail> getAppsForActivity(String activityKey) {
+        List<AppDetail> apps = getApps();
+        if (activityKey != null) Collections.sort(apps, new ActivityComparator(this, activityKey));
+
+        return apps;
     }
 
     public List<AppDetail> getApps() {
@@ -118,6 +170,55 @@ public class Felix extends Application {
         return hidden;
     }
 
+    public void onAppsChanged() {
+        for (AppsChangedListener listener : listeners) {
+            listener.onAppsChanged();
+        }
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        Awareness.FenceApi.updateFences(client, new FenceUpdateRequest.Builder()
+                .addFence(FenceReceiver.KEY_DRIVING, DetectedActivityFence.during(DetectedActivityFence.IN_VEHICLE), intent)
+                .addFence(FenceReceiver.KEY_BIKING, DetectedActivityFence.during(DetectedActivityFence.ON_BICYCLE), intent)
+                .addFence(FenceReceiver.KEY_RUNNING, DetectedActivityFence.during(DetectedActivityFence.RUNNING), intent)
+                .addFence(FenceReceiver.KEY_WALKING, DetectedActivityFence.during(DetectedActivityFence.WALKING, DetectedActivityFence.ON_FOOT), intent)
+                .addFence(FenceReceiver.KEY_HEADPHONES, HeadphoneFence.during(HeadphoneState.PLUGGED_IN), intent)
+                .build());
+
+        Awareness.SnapshotApi.getDetectedActivity(client).setResultCallback(new ResultCallback<DetectedActivityResult>() {
+            @Override
+            public void onResult(@NonNull DetectedActivityResult result) {
+                switch (result.getActivityRecognitionResult().getMostProbableActivity().getType()) {
+                    case DetectedActivity.IN_VEHICLE:
+                        activityKey = FenceReceiver.KEY_DRIVING;
+                        break;
+                    case DetectedActivity.ON_BICYCLE:
+                        activityKey = FenceReceiver.KEY_BIKING;
+                        break;
+                    case DetectedActivity.RUNNING:
+                        activityKey = FenceReceiver.KEY_RUNNING;
+                        break;
+                    case DetectedActivity.WALKING:
+                    case DetectedActivity.ON_FOOT:
+                        activityKey = FenceReceiver.KEY_WALKING;
+                        break;
+                }
+            }
+        });
+
+        Awareness.SnapshotApi.getHeadphoneState(client).setResultCallback(new ResultCallback<HeadphoneStateResult>() {
+            @Override
+            public void onResult(@NonNull HeadphoneStateResult result) {
+                isHeadphones = result.getHeadphoneState().getState() == HeadphoneState.PLUGGED_IN;
+            }
+        });
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+    }
+
     public void addListener(AppsChangedListener listener) {
         listeners.add(listener);
     }
@@ -126,13 +227,48 @@ public class Felix extends Application {
         listeners.add(listener);
     }
 
-    public void onAppsChanged() {
-        for (AppsChangedListener listener : listeners) {
-            listener.onAppsChanged();
-        }
+    public void addActivityListener(ActivityChangedListener listener) {
+        activityListeners.add(listener);
+    }
+
+    public void removeActivityListener(ActivityChangedListener listener) {
+        activityListeners.remove(listener);
     }
 
     public interface AppsChangedListener {
         void onAppsChanged();
+    }
+
+    public interface ActivityChangedListener {
+        void onActivityChanged();
+    }
+
+    private class ActivityComparator implements Comparator<AppDetail> {
+
+        private Context context;
+        private String activityKey;
+
+        ActivityComparator(Context context, String activityKey) {
+            this.context = context;
+            this.activityKey = activityKey;
+        }
+
+        @Override
+        public int compare(AppDetail t1, AppDetail t2) {
+            switch (activityKey) {
+                case FenceReceiver.KEY_DRIVING:
+                    return t2.getDriving(context) - t1.getDriving(context);
+                case FenceReceiver.KEY_BIKING:
+                    return t2.getBiking(context) - t1.getBiking(context);
+                case FenceReceiver.KEY_RUNNING:
+                    return t2.getRunning(context) - t1.getRunning(context);
+                case FenceReceiver.KEY_WALKING:
+                    return t2.getWalking(context) - t1.getWalking(context);
+                case FenceReceiver.KEY_HEADPHONES:
+                    return t2.getHeadphones(context) - t1.getHeadphones(context);
+                default:
+                    return 0;
+            }
+        }
     }
 }
