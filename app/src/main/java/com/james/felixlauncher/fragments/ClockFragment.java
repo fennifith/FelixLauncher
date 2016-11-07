@@ -1,16 +1,19 @@
 package com.james.felixlauncher.fragments;
 
+import android.app.AlarmManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.AlarmClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +31,7 @@ import com.james.felixlauncher.data.WeatherCondition;
 import com.james.felixlauncher.receivers.FenceReceiver;
 import com.james.felixlauncher.views.SquareImageView;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -38,11 +42,12 @@ public class ClockFragment extends CustomFragment implements Felix.ActivityChang
 
     private static final String
             FORMAT_CLOCK = "h:mm",
+            FORMAT_CLOCK_24H = "kk:mm",
             FORMAT_TIME = "a",
             FORMAT_DATE = "EEEE, MMMM d";
 
     private TextView clock, time, date;
-    private BroadcastReceiver receiver;
+    private TimeReceiver receiver;
     private SimpleDateFormat clockFormat, timeFormat, dateFormat;
 
     private View activity;
@@ -55,6 +60,10 @@ public class ClockFragment extends CustomFragment implements Felix.ActivityChang
 
     private View headphones;
     private AppIconAdapter headphonesAdapter;
+
+    private View alarm;
+    private TextView alarmText;
+    private AlarmManager alarmManager;
 
     private Felix felix;
 
@@ -88,6 +97,10 @@ public class ClockFragment extends CustomFragment implements Felix.ActivityChang
         headphonesAdapter = new AppIconAdapter(getContext(), getContext().getPackageManager(), new ArrayList<AppDetail>());
         headphonesRecycler.setAdapter(headphonesAdapter);
 
+        alarm = rootView.findViewById(R.id.alarm);
+        alarmText = (TextView) rootView.findViewById(R.id.alarmText);
+        alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+
         clockFormat = new SimpleDateFormat(FORMAT_CLOCK, Locale.getDefault());
         timeFormat = new SimpleDateFormat(FORMAT_TIME, Locale.getDefault());
         dateFormat = new SimpleDateFormat(FORMAT_DATE, Locale.getDefault());
@@ -97,24 +110,15 @@ public class ClockFragment extends CustomFragment implements Felix.ActivityChang
         time.setText(timeFormat.format(current));
         date.setText(dateFormat.format(current));
 
-        receiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (intent.getAction().matches(Intent.ACTION_TIME_TICK)) {
-                    Date current = new Date();
-                    clock.setText(clockFormat.format(current));
-                    time.setText(timeFormat.format(current));
-                    date.setText(dateFormat.format(current));
-                }
-            }
-        };
-
+        receiver = new TimeReceiver();
         getActivity().registerReceiver(receiver, new IntentFilter(Intent.ACTION_TIME_TICK));
 
-        rootView.findViewById(R.id.alarm).setOnClickListener(new View.OnClickListener() {
+        alarm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(AlarmClock.ACTION_SET_ALARM));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+                    startActivity(new Intent(AlarmClock.ACTION_SHOW_ALARMS));
+                else startActivity(new Intent(AlarmClock.ACTION_SET_ALARM));
             }
         });
 
@@ -142,7 +146,6 @@ public class ClockFragment extends CustomFragment implements Felix.ActivityChang
 
         if (felix != null && activity != null && activityImage != null && activityAdapter != null) {
             String activityKey = felix.getActivityKey();
-            activity.setVisibility(activityKey != null ? View.VISIBLE : View.GONE);
 
             if (activityKey != null) {
                 switch (activityKey) {
@@ -166,9 +169,11 @@ public class ClockFragment extends CustomFragment implements Felix.ActivityChang
                     else apps.add(app);
                 }
 
+
+                activity.setVisibility(apps.size() > 0 ? View.VISIBLE : View.GONE);
                 activityAdapter.setApps(apps);
-            }
-            ;
+            } else activity.setVisibility(View.GONE);
+
         }
 
         felix.getWeather(new ResultCallback<WeatherResult>() {
@@ -193,21 +198,64 @@ public class ClockFragment extends CustomFragment implements Felix.ActivityChang
 
         if (headphones != null && headphonesAdapter != null) {
             if (felix.isHeadphones()) {
-                headphones.setVisibility(View.VISIBLE);
-
                 List<AppDetail> apps = new ArrayList<>();
                 for (AppDetail app : felix.getAppsForActivity(FenceReceiver.KEY_HEADPHONES)) {
                     if (apps.size() >= 10) break;
                     else apps.add(app);
                 }
 
+                headphones.setVisibility(apps.size() > 0 ? View.VISIBLE : View.GONE);
                 headphonesAdapter.setApps(apps);
             } else headphones.setVisibility(View.GONE);
+        }
+
+        if (alarm != null && alarmText != null) {
+            Date current = new Date();
+            if (alarmManager != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && alarmManager.getNextAlarmClock() != null) {
+                Date alarmDate = new Date(alarmManager.getNextAlarmClock().getTriggerTime());
+                if (current.before(alarmDate)) alarm.setVisibility(View.VISIBLE);
+                alarmText.setText(clockFormat.format(alarmDate));
+                alarmText.setVisibility(View.VISIBLE);
+            } else {
+                alarm.setVisibility(isEvening() ? View.VISIBLE : View.GONE);
+                alarmText.setVisibility(View.GONE);
+            }
         }
     }
 
     @Override
     public void onActivityChanged() {
         onSelect();
+    }
+
+    private boolean isEvening() {
+        try {
+            return new SimpleDateFormat(FORMAT_CLOCK_24H, Locale.getDefault()).parse(DateFormat.format(FORMAT_CLOCK_24H, new Date()).toString()).after(new SimpleDateFormat(FORMAT_CLOCK_24H, Locale.getDefault()).parse("18:00"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private class TimeReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().matches(Intent.ACTION_TIME_TICK)) {
+                Date current = new Date();
+                clock.setText(clockFormat.format(current));
+                time.setText(timeFormat.format(current));
+                date.setText(dateFormat.format(current));
+
+                if (alarmManager != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && alarmManager.getNextAlarmClock() != null) {
+                    Date alarmDate = new Date(alarmManager.getNextAlarmClock().getTriggerTime());
+                    if (current.before(alarmDate)) alarm.setVisibility(View.VISIBLE);
+                    alarmText.setText(clockFormat.format(alarmDate));
+                    alarmText.setVisibility(View.VISIBLE);
+                } else {
+                    alarm.setVisibility(isEvening() ? View.VISIBLE : View.GONE);
+                    alarmText.setVisibility(View.GONE);
+                }
+            }
+        }
     }
 }

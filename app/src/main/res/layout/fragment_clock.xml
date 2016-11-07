@@ -217,15 +217,32 @@
                     android:layout_gravity="center_horizontal"
                     app:srcCompat="@drawable/ic_clock" />
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
-                    android:text="@string/set_alarm"
-                    android:layout_gravity="center_vertical"
-                    android:textColor="@color/textColorPrimaryDark"
-                    android:textSize="16sp" />
+                    android:orientation="vertical"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/set_alarm"
+                        android:layout_gravity="center_vertical"
+                        android:textColor="@color/textColorPrimaryDark"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/alarmText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/next_alarm"
+                        android:layout_gravity="center_vertical"
+                        android:textColor="@color/textColorSecondaryDark"
+                        android:visibility="gone" />
+
+                </LinearLayout>
 
             </LinearLayout>
 

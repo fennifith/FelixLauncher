@@ -12,6 +12,7 @@
     <string name="show_wallpaper">Show Wallpaper</string>
     <string name="set_wallpaper">Set Wallpaper</string>
     <string name="set_alarm">Set Alarm</string>
+    <string name="next_alarm">Next Alarm: %1$s</string>
     <string name="add_favorites">Add to Favorites</string>
     <string name="set_hidden">Set Hidden</string>
     <string name="play_store">Open in Play Store</string>

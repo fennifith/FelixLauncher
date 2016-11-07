@@ -20,6 +20,7 @@ import java.util.Locale;
 
 public class AppDetail implements Parcelable {
 
+    private static final String KEY_OPENED = "opened";
     private static final String KEY_FAVORITE = "fav";
     private static final String KEY_HIDDEN = "hide";
     private static final String KEY_TIME = "time";
@@ -77,7 +78,7 @@ public class AppDetail implements Parcelable {
         date = DateFormat.format(DATE_FORMAT, Calendar.getInstance().getTime()).toString();
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        prefs.edit().putString(getKey(KEY_TIME), time).putString(getKey(KEY_DATE), date).apply();
+        prefs.edit().putString(getKey(KEY_TIME), time).putString(getKey(KEY_DATE), date).putInt(getKey(KEY_OPENED), prefs.getInt(getKey(KEY_OPENED), 0) + 1).apply();
 
         String key = felix.getActivityKey();
         if (key != null)
@@ -93,24 +94,19 @@ public class AppDetail implements Parcelable {
         return name + "-" + key;
     }
 
-    public int getDriving(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getInt(getKey(FenceReceiver.KEY_DRIVING), 0);
+    public float getOpenScale(Context context, String key) {
+        int opened = getOpened(context);
+        if (opened > 0)
+            return (float) getOpened(context, key) / opened;
+        else return 0;
     }
 
-    public int getBiking(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getInt(getKey(FenceReceiver.KEY_BIKING), 0);
+    public int getOpened(Context context, String key) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getInt(getKey(key), 0);
     }
 
-    public int getRunning(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getInt(getKey(FenceReceiver.KEY_RUNNING), 0);
-    }
-
-    public int getWalking(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getInt(getKey(FenceReceiver.KEY_WALKING), 0);
-    }
-
-    public int getHeadphones(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getInt(getKey(FenceReceiver.KEY_HEADPHONES), 0);
+    public int getOpened(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getInt(getKey(KEY_OPENED), 0);
     }
 
     public void setFav(Context context, boolean fav) {

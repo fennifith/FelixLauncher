@@ -62,10 +62,7 @@ public class AppsFragment extends CustomFragment implements Felix.AppsChangedLis
 
     @Override
     public void onAppsChanged() {
-        if (adapter != null && progress != null) {
-            adapter.setList(felix.getApps());
-            progress.setVisibility(View.GONE);
-        }
+        onSelect();
     }
 
     @Override
@@ -73,7 +70,7 @@ public class AppsFragment extends CustomFragment implements Felix.AppsChangedLis
         if (felix != null && adapter != null && progress != null) {
             List<AppDetail> apps = felix.getApps();
             if (apps.size() > 0) progress.setVisibility(View.GONE);
-            if (adapter.getList().size() != apps.size()) adapter.setList(apps);
+            adapter.setList(apps);
         }
     }
 }

@@ -59,10 +59,7 @@ public class FavFragment extends CustomFragment implements Felix.AppsChangedList
 
     @Override
     public void onAppsChanged() {
-        if (adapter != null && progress != null) {
-            adapter.setList(felix.getFavorites());
-            progress.setVisibility(View.GONE);
-        }
+        onSelect();
     }
 
     @Override
@@ -70,7 +67,7 @@ public class FavFragment extends CustomFragment implements Felix.AppsChangedList
         if (felix != null && adapter != null && progress != null) {
             List<AppDetail> apps = felix.getFavorites();
             if (apps.size() > 0) progress.setVisibility(View.GONE);
-            if (adapter.getList().size() != apps.size()) adapter.setList(apps);
+            adapter.setList(apps);
         }
     }
 }

@@ -22,11 +22,14 @@ import com.james.felixlauncher.activities.SettingsActivity;
 import com.james.felixlauncher.data.AppDetail;
 import com.james.felixlauncher.views.SquareImageView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class AppDetailAdapter extends RecyclerView.Adapter<AppDetailAdapter.ViewHolder> {
 
@@ -270,16 +273,30 @@ public class AppDetailAdapter extends RecyclerView.Adapter<AppDetailAdapter.View
 
     private class TimeComparator implements Comparator<AppDetail> {
 
-        private String time;
+        private Date time;
+        private SimpleDateFormat format;
 
         TimeComparator() {
-            time = DateFormat.format(AppDetail.TIME_FORMAT, Calendar.getInstance().getTime()).toString();
+            format = new SimpleDateFormat(AppDetail.TIME_FORMAT, Locale.getDefault());
+            try {
+                time = format.parse(DateFormat.format(AppDetail.TIME_FORMAT, new Date().getTime()).toString());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
 
         @Override
         public int compare(AppDetail t1, AppDetail t2) {
-            if (t1.time != null && t2.time != null)
-                return t2.time.compareTo(time) - t1.time.compareTo(time);
+            if (time != null && t1.time != null && t2.time != null) {
+                try {
+                    return format.parse(t2.time).compareTo(time) - format.parse(t1.time).compareTo(time);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (t1.time != null && t2.time == null) return -1;
+            else if (t1.time == null && t2.time != null) return 1;
             else return 0;
         }
     }

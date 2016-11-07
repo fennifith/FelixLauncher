@@ -210,7 +210,10 @@ public class LauncherActivity extends AppCompatActivity implements SensorEventLi
 
         oldColor = color;
 
-        if (viewPager != null) viewPager.setCurrentItem(1);
+        if (viewPager != null && adapter != null) {
+            if (viewPager.getCurrentItem() != 1) viewPager.setCurrentItem(1);
+            else adapter.onPageChange(1);
+        }
 
         if (sensorManager != null && sensor != null)
             sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_UI);

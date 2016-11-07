@@ -137,8 +137,15 @@ public class Felix extends Application implements GoogleApiClient.ConnectionCall
     }
 
     public List<AppDetail> getAppsForActivity(String activityKey) {
-        List<AppDetail> apps = getApps();
-        if (activityKey != null) Collections.sort(apps, new ActivityComparator(this, activityKey));
+        List<AppDetail> apps = new ArrayList<>();
+
+        if (activityKey != null) {
+            for (AppDetail app : getApps()) {
+                if (app.getOpened(this, activityKey) > 0) apps.add(app);
+            }
+
+            Collections.sort(apps, new ActivityComparator(this, activityKey));
+        }
 
         return apps;
     }
@@ -255,20 +262,7 @@ public class Felix extends Application implements GoogleApiClient.ConnectionCall
 
         @Override
         public int compare(AppDetail t1, AppDetail t2) {
-            switch (activityKey) {
-                case FenceReceiver.KEY_DRIVING:
-                    return t2.getDriving(context) - t1.getDriving(context);
-                case FenceReceiver.KEY_BIKING:
-                    return t2.getBiking(context) - t1.getBiking(context);
-                case FenceReceiver.KEY_RUNNING:
-                    return t2.getRunning(context) - t1.getRunning(context);
-                case FenceReceiver.KEY_WALKING:
-                    return t2.getWalking(context) - t1.getWalking(context);
-                case FenceReceiver.KEY_HEADPHONES:
-                    return t2.getHeadphones(context) - t1.getHeadphones(context);
-                default:
-                    return 0;
-            }
+            return (int) ((t2.getOpenScale(context, activityKey) * 100) - (t1.getOpenScale(context, activityKey) * 100));
         }
     }
 }
