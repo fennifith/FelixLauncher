@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.james.felixlauncher.R;
-import com.james.felixlauncher.data.AppDetail;
+import com.james.felixlauncher.data.AppData;
 import com.james.felixlauncher.views.SquareImageView;
 
 import java.util.List;
@@ -20,15 +20,15 @@ public class AppIconAdapter extends RecyclerView.Adapter<AppIconAdapter.ViewHold
 
     private Context context;
     private PackageManager manager;
-    private List<AppDetail> apps;
+    private List<AppData> apps;
 
-    public AppIconAdapter(Context context, PackageManager manager, List<AppDetail> apps) {
+    public AppIconAdapter(Context context, PackageManager manager, List<AppData> apps) {
         this.context = context;
         this.manager = manager;
         this.apps = apps;
     }
 
-    public void setApps(List<AppDetail> apps) {
+    public void setApps(List<AppData> apps) {
         this.apps = apps;
         notifyDataSetChanged();
     }
@@ -40,7 +40,7 @@ public class AppIconAdapter extends RecyclerView.Adapter<AppIconAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        AppDetail app = apps.get(position);
+        AppData app = apps.get(position);
 
         if (app.icon != null)
             ((SquareImageView) holder.v.findViewById(R.id.image)).setImageDrawable(app.icon);

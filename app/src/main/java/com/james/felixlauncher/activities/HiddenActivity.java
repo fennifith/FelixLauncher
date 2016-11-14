@@ -9,11 +9,11 @@ import android.widget.ProgressBar;
 
 import com.james.felixlauncher.Felix;
 import com.james.felixlauncher.R;
-import com.james.felixlauncher.adapters.AppDetailAdapter;
+import com.james.felixlauncher.adapters.AppDataAdapter;
 
 public class HiddenActivity extends AppCompatActivity implements Felix.AppsChangedListener {
 
-    private AppDetailAdapter adapter;
+    private AppDataAdapter adapter;
     private ProgressBar progress;
     private Felix felix;
 
@@ -31,8 +31,8 @@ public class HiddenActivity extends AppCompatActivity implements Felix.AppsChang
         RecyclerView recycler = (RecyclerView) findViewById(R.id.recycler);
         recycler.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new AppDetailAdapter(this, getPackageManager(), felix.getHidden());
-        adapter.setListener(new AppDetailAdapter.Listener() {
+        adapter = new AppDataAdapter(this, getPackageManager(), felix.getHidden());
+        adapter.setListener(new AppDataAdapter.Listener() {
             @Override
             public void onChange() {
                 if (felix != null) felix.onAppsChanged();

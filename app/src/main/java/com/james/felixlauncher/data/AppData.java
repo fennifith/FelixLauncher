@@ -18,7 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class AppDetail implements Parcelable {
+public class AppData implements Parcelable {
 
     private static final String KEY_OPENED = "opened";
     private static final String KEY_FAVORITE = "fav";
@@ -30,15 +30,15 @@ public class AppDetail implements Parcelable {
     private static final String TIME_FORMAT_READABLE = "h:mm";
     private static final String DATE_FORMAT = "EEEE, MMMM d";
 
-    public static final Creator<AppDetail> CREATOR = new Creator<AppDetail>() {
+    public static final Creator<AppData> CREATOR = new Creator<AppData>() {
         @Override
-        public AppDetail createFromParcel(Parcel in) {
-            return new AppDetail(in);
+        public AppData createFromParcel(Parcel in) {
+            return new AppData(in);
         }
 
         @Override
-        public AppDetail[] newArray(int size) {
-            return new AppDetail[size];
+        public AppData[] newArray(int size) {
+            return new AppData[size];
         }
     };
 
@@ -46,7 +46,7 @@ public class AppDetail implements Parcelable {
     public boolean fav, hide;
     public Drawable icon;
 
-    public AppDetail(Context context, String label, String name) {
+    public AppData(Context context, String label, String name) {
         this.label = label;
         this.name = name;
 
@@ -119,7 +119,7 @@ public class AppDetail implements Parcelable {
         PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(getKey(KEY_HIDDEN), hide).apply();
     }
 
-    protected AppDetail(Parcel in) {
+    protected AppData(Parcel in) {
         label = in.readString();
         name = in.readString();
         fav = in.readInt() == 1;

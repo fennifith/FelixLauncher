@@ -26,7 +26,7 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.james.felixlauncher.Felix;
 import com.james.felixlauncher.R;
 import com.james.felixlauncher.adapters.AppIconAdapter;
-import com.james.felixlauncher.data.AppDetail;
+import com.james.felixlauncher.data.AppData;
 import com.james.felixlauncher.data.WeatherCondition;
 import com.james.felixlauncher.receivers.FenceReceiver;
 import com.james.felixlauncher.views.SquareImageView;
@@ -83,7 +83,7 @@ public class ClockFragment extends CustomFragment implements Felix.ActivityChang
         activityImage = (SquareImageView) rootView.findViewById(R.id.activityImage);
         RecyclerView activityRecycler = (RecyclerView) rootView.findViewById(R.id.activityRecycler);
         activityRecycler.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        activityAdapter = new AppIconAdapter(getContext(), getContext().getPackageManager(), new ArrayList<AppDetail>());
+        activityAdapter = new AppIconAdapter(getContext(), getContext().getPackageManager(), new ArrayList<AppData>());
         activityRecycler.setAdapter(activityAdapter);
 
         weather = rootView.findViewById(R.id.weather);
@@ -94,7 +94,7 @@ public class ClockFragment extends CustomFragment implements Felix.ActivityChang
         headphones = rootView.findViewById(R.id.headphones);
         RecyclerView headphonesRecycler = (RecyclerView) rootView.findViewById(R.id.headphonesRecycler);
         headphonesRecycler.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        headphonesAdapter = new AppIconAdapter(getContext(), getContext().getPackageManager(), new ArrayList<AppDetail>());
+        headphonesAdapter = new AppIconAdapter(getContext(), getContext().getPackageManager(), new ArrayList<AppData>());
         headphonesRecycler.setAdapter(headphonesAdapter);
 
         alarm = rootView.findViewById(R.id.alarm);
@@ -163,8 +163,8 @@ public class ClockFragment extends CustomFragment implements Felix.ActivityChang
                         break;
                 }
 
-                List<AppDetail> apps = new ArrayList<>();
-                for (AppDetail app : felix.getAppsForActivity(activityKey)) {
+                List<AppData> apps = new ArrayList<>();
+                for (AppData app : felix.getAppsForActivity(activityKey)) {
                     if (apps.size() >= 10) break;
                     else apps.add(app);
                 }
@@ -198,8 +198,8 @@ public class ClockFragment extends CustomFragment implements Felix.ActivityChang
 
         if (headphones != null && headphonesAdapter != null) {
             if (felix.isHeadphones()) {
-                List<AppDetail> apps = new ArrayList<>();
-                for (AppDetail app : felix.getAppsForActivity(FenceReceiver.KEY_HEADPHONES)) {
+                List<AppData> apps = new ArrayList<>();
+                for (AppData app : felix.getAppsForActivity(FenceReceiver.KEY_HEADPHONES)) {
                     if (apps.size() >= 10) break;
                     else apps.add(app);
                 }

@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 import com.james.felixlauncher.R;
 import com.james.felixlauncher.activities.SettingsActivity;
-import com.james.felixlauncher.data.AppDetail;
+import com.james.felixlauncher.data.AppData;
 import com.james.felixlauncher.views.SquareImageView;
 
 import java.text.ParseException;
@@ -31,16 +31,16 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class AppDetailAdapter extends RecyclerView.Adapter<AppDetailAdapter.ViewHolder> {
+public class AppDataAdapter extends RecyclerView.Adapter<AppDataAdapter.ViewHolder> {
 
-    private List<AppDetail> list;
-    private List<AppDetail> filteredList;
+    private List<AppData> list;
+    private List<AppData> filteredList;
     private boolean grid;
     private Listener listener;
     private PackageManager manager;
     private Activity activity;
 
-    public AppDetailAdapter(final Activity activity, PackageManager manager, List<AppDetail> list) {
+    public AppDataAdapter(final Activity activity, PackageManager manager, List<AppData> list) {
         this.list = new ArrayList<>();
         this.list.addAll(list);
 
@@ -50,9 +50,9 @@ public class AppDetailAdapter extends RecyclerView.Adapter<AppDetailAdapter.View
         filteredList = new ArrayList<>();
         filteredList.addAll(list);
 
-        Collections.sort(filteredList, new Comparator<AppDetail>() {
+        Collections.sort(filteredList, new Comparator<AppData>() {
             @Override
-            public int compare(AppDetail t1, AppDetail t2) {
+            public int compare(AppData t1, AppData t2) {
                 return t1.label.compareToIgnoreCase(t2.label);
             }
         });
@@ -72,16 +72,16 @@ public class AppDetailAdapter extends RecyclerView.Adapter<AppDetailAdapter.View
         this.grid = grid;
     }
 
-    public void setList(List<AppDetail> list) {
+    public void setList(List<AppData> list) {
         this.list.clear();
         this.list.addAll(list);
 
         filteredList.clear();
         filteredList.addAll(list);
 
-        Collections.sort(filteredList, new Comparator<AppDetail>() {
+        Collections.sort(filteredList, new Comparator<AppData>() {
             @Override
-            public int compare(AppDetail t1, AppDetail t2) {
+            public int compare(AppData t1, AppData t2) {
                 return t1.label.compareToIgnoreCase(t2.label);
             }
         });
@@ -91,24 +91,24 @@ public class AppDetailAdapter extends RecyclerView.Adapter<AppDetailAdapter.View
         notifyDataSetChanged();
     }
 
-    public List<AppDetail> getList() {
-        List<AppDetail> list = new ArrayList<>();
+    public List<AppData> getList() {
+        List<AppData> list = new ArrayList<>();
         list.addAll(this.list);
         return list;
     }
 
     @Override
-    public AppDetailAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public AppDataAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = inflater.inflate(grid ? R.layout.item_icon : R.layout.item_list, null);
         return new ViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(final AppDetailAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(final AppDataAdapter.ViewHolder holder, int position) {
         if (holder.t != null && holder.t.isAlive()) holder.t.interrupt();
 
-        AppDetail app = filteredList.get(position);
+        AppData app = filteredList.get(position);
 
         holder.v.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
 
@@ -162,7 +162,7 @@ public class AppDetailAdapter extends RecyclerView.Adapter<AppDetailAdapter.View
                 final BottomSheetDialog dialog = new BottomSheetDialog(v.getContext());
                 View sheet = activity.getLayoutInflater().inflate(R.layout.bottom_sheet, null);
 
-                AppDetail app = filteredList.get(holder.getAdapterPosition());
+                AppData app = filteredList.get(holder.getAdapterPosition());
                 if (app.fav)
                     ((TextView) sheet.findViewById(R.id.fav_text)).setText(R.string.favorites_remove);
                 if (app.hide)
@@ -174,7 +174,7 @@ public class AppDetailAdapter extends RecyclerView.Adapter<AppDetailAdapter.View
                 sheet.findViewById(R.id.sheet_fav).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        AppDetail app = filteredList.get(holder.getAdapterPosition());
+                        AppData app = filteredList.get(holder.getAdapterPosition());
                         app.setFav(activity, !app.fav);
                         listener.onChange();
 
@@ -185,7 +185,7 @@ public class AppDetailAdapter extends RecyclerView.Adapter<AppDetailAdapter.View
                 sheet.findViewById(R.id.sheet_hide).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        AppDetail app = filteredList.get(holder.getAdapterPosition());
+                        AppData app = filteredList.get(holder.getAdapterPosition());
                         app.setHide(activity, !app.hide);
                         listener.onChange();
 
@@ -233,8 +233,8 @@ public class AppDetailAdapter extends RecyclerView.Adapter<AppDetailAdapter.View
         if (text == null) {
             filteredList.addAll(list);
 
-            Collections.sort(filteredList, new Comparator<AppDetail>() {
-                public int compare(AppDetail v1, AppDetail v2) {
+            Collections.sort(filteredList, new Comparator<AppData>() {
+                public int compare(AppData v1, AppData v2) {
                     return v1.label.compareTo(v2.label);
                 }
             });
@@ -243,12 +243,12 @@ public class AppDetailAdapter extends RecyclerView.Adapter<AppDetailAdapter.View
             return;
         }
 
-        for (AppDetail detail : list) {
+        for (AppData detail : list) {
             if (detail.label.toLowerCase().contains(text.toLowerCase())) filteredList.add(detail);
         }
 
-        Collections.sort(filteredList, new Comparator<AppDetail>() {
-            public int compare(AppDetail v1, AppDetail v2) {
+        Collections.sort(filteredList, new Comparator<AppData>() {
+            public int compare(AppData v1, AppData v2) {
                 return v1.label.compareTo(v2.label);
             }
         });
@@ -271,25 +271,25 @@ public class AppDetailAdapter extends RecyclerView.Adapter<AppDetailAdapter.View
         }
     }
 
-    private class TimeComparator implements Comparator<AppDetail> {
+    private class TimeComparator implements Comparator<AppData> {
 
         private Date time;
         private SimpleDateFormat format;
 
         TimeComparator() {
-            format = new SimpleDateFormat(AppDetail.TIME_FORMAT, Locale.getDefault());
+            format = new SimpleDateFormat(AppData.TIME_FORMAT, Locale.getDefault());
             try {
-                time = format.parse(DateFormat.format(AppDetail.TIME_FORMAT, new Date().getTime()).toString());
+                time = format.parse(DateFormat.format(AppData.TIME_FORMAT, new Date().getTime()).toString());
             } catch (ParseException e) {
                 e.printStackTrace();
             }
         }
 
         @Override
-        public int compare(AppDetail t1, AppDetail t2) {
+        public int compare(AppData t1, AppData t2) {
             if (time != null && t1.time != null && t2.time != null) {
                 try {
-                    return format.parse(t2.time).compareTo(time) - format.parse(t1.time).compareTo(time);
+                    return format.parse(t1.time).compareTo(time) - format.parse(t2.time).compareTo(time);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }

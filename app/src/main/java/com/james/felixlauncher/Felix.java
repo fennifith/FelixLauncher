@@ -28,7 +28,7 @@ import com.google.android.gms.awareness.state.HeadphoneState;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.location.DetectedActivity;
-import com.james.felixlauncher.data.AppDetail;
+import com.james.felixlauncher.data.AppData;
 import com.james.felixlauncher.receivers.FenceReceiver;
 
 import java.util.ArrayList;
@@ -39,7 +39,7 @@ import java.util.List;
 public class Felix extends Application implements GoogleApiClient.ConnectionCallbacks {
 
     private GoogleApiClient client;
-    private List<AppDetail> apps;
+    private List<AppData> apps;
     private List<AppsChangedListener> listeners;
     private List<ActivityChangedListener> activityListeners;
     private boolean isLoading;
@@ -75,10 +75,10 @@ public class Felix extends Application implements GoogleApiClient.ConnectionCall
                 PackageManager manager = getPackageManager();
                 if (manager == null) return;
 
-                final List<AppDetail> apps = new ArrayList<>();
+                final List<AppData> apps = new ArrayList<>();
                 List<ResolveInfo> infos = manager.queryIntentActivities(new Intent(Intent.ACTION_MAIN, null).addCategory(Intent.CATEGORY_LAUNCHER), 0);
                 for (ResolveInfo info : infos) {
-                    apps.add(new AppDetail(Felix.this, info.loadLabel(manager).toString(), info.activityInfo.packageName));
+                    apps.add(new AppData(Felix.this, info.loadLabel(manager).toString(), info.activityInfo.packageName));
                 }
 
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
@@ -136,11 +136,11 @@ public class Felix extends Application implements GoogleApiClient.ConnectionCall
         }
     }
 
-    public List<AppDetail> getAppsForActivity(String activityKey) {
-        List<AppDetail> apps = new ArrayList<>();
+    public List<AppData> getAppsForActivity(String activityKey) {
+        List<AppData> apps = new ArrayList<>();
 
         if (activityKey != null) {
-            for (AppDetail app : getApps()) {
+            for (AppData app : getApps()) {
                 if (app.getOpened(this, activityKey) > 0) apps.add(app);
             }
 
@@ -150,27 +150,27 @@ public class Felix extends Application implements GoogleApiClient.ConnectionCall
         return apps;
     }
 
-    public List<AppDetail> getApps() {
-        List<AppDetail> apps = new ArrayList<>();
-        for (AppDetail app : this.apps) {
+    public List<AppData> getApps() {
+        List<AppData> apps = new ArrayList<>();
+        for (AppData app : this.apps) {
             if (!app.hide) apps.add(app);
         }
 
         return apps;
     }
 
-    public List<AppDetail> getFavorites() {
-        List<AppDetail> favorites = new ArrayList<>();
-        for (AppDetail app : apps) {
+    public List<AppData> getFavorites() {
+        List<AppData> favorites = new ArrayList<>();
+        for (AppData app : apps) {
             if (!app.hide && app.fav) favorites.add(app);
         }
 
         return favorites;
     }
 
-    public List<AppDetail> getHidden() {
-        List<AppDetail> hidden = new ArrayList<>();
-        for (AppDetail app : apps) {
+    public List<AppData> getHidden() {
+        List<AppData> hidden = new ArrayList<>();
+        for (AppData app : apps) {
             if (app.hide) hidden.add(app);
         }
 
@@ -250,7 +250,7 @@ public class Felix extends Application implements GoogleApiClient.ConnectionCall
         void onActivityChanged();
     }
 
-    private class ActivityComparator implements Comparator<AppDetail> {
+    private class ActivityComparator implements Comparator<AppData> {
 
         private Context context;
         private String activityKey;
@@ -261,7 +261,7 @@ public class Felix extends Application implements GoogleApiClient.ConnectionCall
         }
 
         @Override
-        public int compare(AppDetail t1, AppDetail t2) {
+        public int compare(AppData t1, AppData t2) {
             return (int) ((t2.getOpenScale(context, activityKey) * 100) - (t1.getOpenScale(context, activityKey) * 100));
         }
     }

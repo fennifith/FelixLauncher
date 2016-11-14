@@ -11,14 +11,14 @@ import android.widget.ProgressBar;
 
 import com.james.felixlauncher.Felix;
 import com.james.felixlauncher.R;
-import com.james.felixlauncher.adapters.AppDetailAdapter;
-import com.james.felixlauncher.data.AppDetail;
+import com.james.felixlauncher.adapters.AppDataAdapter;
+import com.james.felixlauncher.data.AppData;
 
 import java.util.List;
 
 public class AppsFragment extends CustomFragment implements Felix.AppsChangedListener {
 
-    private AppDetailAdapter adapter;
+    private AppDataAdapter adapter;
     private ProgressBar progress;
 
     private Felix felix;
@@ -37,8 +37,8 @@ public class AppsFragment extends CustomFragment implements Felix.AppsChangedLis
         RecyclerView recycler = (RecyclerView) rootView.findViewById(R.id.recycler);
         recycler.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        adapter = new AppDetailAdapter(getActivity(), getContext().getPackageManager(), felix.getApps());
-        adapter.setListener(new AppDetailAdapter.Listener() {
+        adapter = new AppDataAdapter(getActivity(), getContext().getPackageManager(), felix.getApps());
+        adapter.setListener(new AppDataAdapter.Listener() {
             @Override
             public void onChange() {
                 if (felix != null) felix.onAppsChanged();
@@ -68,7 +68,7 @@ public class AppsFragment extends CustomFragment implements Felix.AppsChangedLis
     @Override
     public void onSelect() {
         if (felix != null && adapter != null && progress != null) {
-            List<AppDetail> apps = felix.getApps();
+            List<AppData> apps = felix.getApps();
             if (apps.size() > 0) progress.setVisibility(View.GONE);
             adapter.setList(apps);
         }
