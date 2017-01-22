@@ -11,7 +11,6 @@ import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 
@@ -195,29 +194,33 @@ public class Felix extends Application implements GoogleApiClient.ConnectionCall
 
         Awareness.SnapshotApi.getDetectedActivity(client).setResultCallback(new ResultCallback<DetectedActivityResult>() {
             @Override
-            public void onResult(@NonNull DetectedActivityResult result) {
-                switch (result.getActivityRecognitionResult().getMostProbableActivity().getType()) {
-                    case DetectedActivity.IN_VEHICLE:
-                        activityKey = FenceReceiver.KEY_DRIVING;
-                        break;
-                    case DetectedActivity.ON_BICYCLE:
-                        activityKey = FenceReceiver.KEY_BIKING;
-                        break;
-                    case DetectedActivity.RUNNING:
-                        activityKey = FenceReceiver.KEY_RUNNING;
-                        break;
-                    case DetectedActivity.WALKING:
-                    case DetectedActivity.ON_FOOT:
-                        activityKey = FenceReceiver.KEY_WALKING;
-                        break;
+            public void onResult(DetectedActivityResult result) {
+                if (result != null) {
+                    switch (result.getActivityRecognitionResult().getMostProbableActivity().getType()) {
+                        case DetectedActivity.IN_VEHICLE:
+                            activityKey = FenceReceiver.KEY_DRIVING;
+                            break;
+                        case DetectedActivity.ON_BICYCLE:
+                            activityKey = FenceReceiver.KEY_BIKING;
+                            break;
+                        case DetectedActivity.RUNNING:
+                            activityKey = FenceReceiver.KEY_RUNNING;
+                            break;
+                        case DetectedActivity.WALKING:
+                        case DetectedActivity.ON_FOOT:
+                            activityKey = FenceReceiver.KEY_WALKING;
+                            break;
+                    }
                 }
             }
         });
 
         Awareness.SnapshotApi.getHeadphoneState(client).setResultCallback(new ResultCallback<HeadphoneStateResult>() {
             @Override
-            public void onResult(@NonNull HeadphoneStateResult result) {
-                isHeadphones = result.getHeadphoneState().getState() == HeadphoneState.PLUGGED_IN;
+            public void onResult(HeadphoneStateResult result) {
+                if (result != null) {
+                    isHeadphones = result.getHeadphoneState().getState() == HeadphoneState.PLUGGED_IN;
+                }
             }
         });
     }
