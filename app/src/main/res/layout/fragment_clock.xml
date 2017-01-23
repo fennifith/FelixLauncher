@@ -170,6 +170,7 @@
                 android:gravity="center_vertical">
 
                 <com.james.felixlauncher.views.SquareImageView
+                    android:id="@+id/headphonesImage"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
                     android:scaleType="center"
@@ -209,6 +210,7 @@
                 android:id="@+id/alarm">
 
                 <com.james.felixlauncher.views.SquareImageView
+                    android:id="@+id/alarmImage"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
                     android:scaleType="center"

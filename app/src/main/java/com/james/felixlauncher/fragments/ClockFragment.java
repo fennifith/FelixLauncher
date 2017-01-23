@@ -5,10 +5,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.AlarmClock;
+import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -29,6 +31,7 @@ import com.james.felixlauncher.adapters.AppIconAdapter;
 import com.james.felixlauncher.data.AppData;
 import com.james.felixlauncher.data.WeatherCondition;
 import com.james.felixlauncher.receivers.FenceReceiver;
+import com.james.felixlauncher.utils.ColorUtils;
 import com.james.felixlauncher.views.SquareImageView;
 
 import java.text.ParseException;
@@ -59,9 +62,11 @@ public class ClockFragment extends CustomFragment implements Felix.ActivityChang
     private TextView weatherText, weatherTemperature;
 
     private View headphones;
+    private SquareImageView headphonesImage;
     private AppIconAdapter headphonesAdapter;
 
     private View alarm;
+    private SquareImageView alarmImage;
     private TextView alarmText;
     private AlarmManager alarmManager;
 
@@ -92,12 +97,14 @@ public class ClockFragment extends CustomFragment implements Felix.ActivityChang
         weatherTemperature = (TextView) rootView.findViewById(R.id.temperature);
 
         headphones = rootView.findViewById(R.id.headphones);
+        headphonesImage = (SquareImageView) rootView.findViewById(R.id.headphonesImage);
         RecyclerView headphonesRecycler = (RecyclerView) rootView.findViewById(R.id.headphonesRecycler);
         headphonesRecycler.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         headphonesAdapter = new AppIconAdapter(getContext(), getContext().getPackageManager(), new ArrayList<AppData>());
         headphonesRecycler.setAdapter(headphonesAdapter);
 
         alarm = rootView.findViewById(R.id.alarm);
+        alarmImage = (SquareImageView) rootView.findViewById(R.id.alarmImage);
         alarmText = (TextView) rootView.findViewById(R.id.alarmText);
         alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
 
@@ -125,11 +132,25 @@ public class ClockFragment extends CustomFragment implements Felix.ActivityChang
         rootView.findViewById(R.id.weatherButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/?q=weather")));
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/search?q=weather")));
             }
         });
 
+        setColor(felix.getAccentColor());
+
         return rootView;
+    }
+
+    private void setColor(@ColorInt int color) {
+        int filter = ColorUtils.isColorDark(color) ? Color.WHITE : Color.BLACK;
+        activityImage.setBackgroundColor(color);
+        activityImage.setColorFilter(filter);
+        weatherImage.setBackgroundColor(color);
+        weatherImage.setColorFilter(filter);
+        headphonesImage.setBackgroundColor(color);
+        headphonesImage.setColorFilter(filter);
+        alarmImage.setBackgroundColor(color);
+        alarmImage.setColorFilter(filter);
     }
 
     @Override
@@ -145,6 +166,8 @@ public class ClockFragment extends CustomFragment implements Felix.ActivityChang
         if (context == null) return;
 
         if (felix != null && activity != null && activityImage != null && activityAdapter != null) {
+            setColor(felix.getAccentColor());
+
             String activityKey = felix.getActivityKey();
 
             if (activityKey != null) {

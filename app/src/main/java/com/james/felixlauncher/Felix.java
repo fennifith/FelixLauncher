@@ -3,16 +3,20 @@ package com.james.felixlauncher;
 import android.Manifest;
 import android.app.Application;
 import android.app.PendingIntent;
+import android.app.WallpaperManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.graphics.Palette;
 
 import com.google.android.gms.awareness.Awareness;
 import com.google.android.gms.awareness.fence.DetectedActivityFence;
@@ -29,6 +33,7 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.location.DetectedActivity;
 import com.james.felixlauncher.data.AppData;
 import com.james.felixlauncher.receivers.FenceReceiver;
+import com.james.felixlauncher.utils.ImageUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,6 +43,7 @@ import java.util.List;
 public class Felix extends Application implements GoogleApiClient.ConnectionCallbacks {
 
     private GoogleApiClient client;
+    private WallpaperManager wallpaperManager;
     private List<AppData> apps;
     private List<AppsChangedListener> listeners;
     private List<ActivityChangedListener> activityListeners;
@@ -45,6 +51,8 @@ public class Felix extends Application implements GoogleApiClient.ConnectionCall
 
     private String activityKey;
     private boolean isHeadphones;
+    @ColorInt
+    private int accentColor = Color.BLACK;
     private PendingIntent intent;
 
     @Override
@@ -57,6 +65,8 @@ public class Felix extends Application implements GoogleApiClient.ConnectionCall
         client = new GoogleApiClient.Builder(this).addApi(Awareness.API).build();
         client.registerConnectionCallbacks(this);
         client.connect();
+
+        wallpaperManager = WallpaperManager.getInstance(this);
 
         apps = new ArrayList<>();
         listeners = new ArrayList<>();
@@ -90,6 +100,22 @@ public class Felix extends Application implements GoogleApiClient.ConnectionCall
                 });
             }
         }.start();
+
+        loadWallpaperAccent();
+    }
+
+    private void loadWallpaperAccent() {
+        Palette.from(ImageUtils.drawableToBitmap(wallpaperManager.getFastDrawable()) /* perfect memory optimization right here */).generate(new Palette.PaletteAsyncListener() {
+            @Override
+            public void onGenerated(Palette palette) {
+                accentColor = palette.getVibrantColor(palette.getMutedColor(Color.LTGRAY));
+            }
+        });
+    }
+
+    @ColorInt
+    public int getAccentColor() {
+        return accentColor;
     }
 
     public void getWeather(ResultCallback<WeatherResult> callback) {
@@ -180,6 +206,8 @@ public class Felix extends Application implements GoogleApiClient.ConnectionCall
         for (AppsChangedListener listener : listeners) {
             listener.onAppsChanged();
         }
+
+        loadWallpaperAccent();
     }
 
     @Override

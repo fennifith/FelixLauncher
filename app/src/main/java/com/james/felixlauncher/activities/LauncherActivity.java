@@ -23,6 +23,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.james.felixlauncher.Felix;
 import com.james.felixlauncher.R;
 import com.james.felixlauncher.adapters.PagerAdapter;
 import com.james.felixlauncher.utils.ImageUtils;
@@ -34,7 +35,7 @@ public class LauncherActivity extends AppCompatActivity implements SensorEventLi
     private ImageView clockImage, appsImage, favImage;
     private TextView clockText, appsText, favText;
     private View coordinator;
-    private int primary, accent;
+    private int primary;
 
     private SensorManager sensorManager;
     private Sensor sensor;
@@ -43,10 +44,14 @@ public class LauncherActivity extends AppCompatActivity implements SensorEventLi
     private int color;
     private int oldColor;
 
+    private Felix felix;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        felix = (Felix) getApplicationContext();
 
         coordinator = findViewById(R.id.coordinator);
         clockImage = (ImageView) findViewById(R.id.clockImage);
@@ -59,7 +64,6 @@ public class LauncherActivity extends AppCompatActivity implements SensorEventLi
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
         primary = ContextCompat.getColor(this, android.R.color.secondary_text_dark);
-        accent = ContextCompat.getColor(this, R.color.colorAccent);
 
         viewPager = (ViewPager) findViewById(R.id.pager);
         adapter = new PagerAdapter(this, getSupportFragmentManager());
@@ -73,6 +77,8 @@ public class LauncherActivity extends AppCompatActivity implements SensorEventLi
 
             @Override
             public void onPageSelected(int position) {
+                int accent = felix.getAccentColor();
+
                 if (position == 0) {
                     clockImage.setColorFilter(accent);
                     clockText.setTextColor(accent);
