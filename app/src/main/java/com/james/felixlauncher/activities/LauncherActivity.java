@@ -26,6 +26,7 @@ import android.widget.TextView;
 import com.james.felixlauncher.Felix;
 import com.james.felixlauncher.R;
 import com.james.felixlauncher.adapters.PagerAdapter;
+import com.james.felixlauncher.utils.ColorUtils;
 import com.james.felixlauncher.utils.ImageUtils;
 
 public class LauncherActivity extends AppCompatActivity implements SensorEventListener {
@@ -78,6 +79,8 @@ public class LauncherActivity extends AppCompatActivity implements SensorEventLi
             @Override
             public void onPageSelected(int position) {
                 int accent = felix.getAccentColor();
+                if (ColorUtils.isColorDark(accent))
+                    accent = ColorUtils.lightColor(accent);
 
                 if (position == 0) {
                     clockImage.setColorFilter(accent);
