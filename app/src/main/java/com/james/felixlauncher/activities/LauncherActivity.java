@@ -29,6 +29,8 @@ import com.james.felixlauncher.adapters.PagerAdapter;
 import com.james.felixlauncher.utils.ColorUtils;
 import com.james.felixlauncher.utils.ImageUtils;
 
+import me.jfenn.attribouter.Attribouter;
+
 public class LauncherActivity extends AppCompatActivity implements SensorEventListener {
 
     private ViewPager viewPager;
@@ -55,18 +57,18 @@ public class LauncherActivity extends AppCompatActivity implements SensorEventLi
         felix = (Felix) getApplicationContext();
 
         coordinator = findViewById(R.id.coordinator);
-        clockImage = (ImageView) findViewById(R.id.clockImage);
-        appsImage = (ImageView) findViewById(R.id.appsImage);
-        favImage = (ImageView) findViewById(R.id.favImage);
-        clockText = (TextView) findViewById(R.id.clockText);
-        appsText = (TextView) findViewById(R.id.appsText);
-        favText = (TextView) findViewById(R.id.favText);
+        clockImage = findViewById(R.id.clockImage);
+        appsImage = findViewById(R.id.appsImage);
+        favImage = findViewById(R.id.favImage);
+        clockText = findViewById(R.id.clockText);
+        appsText = findViewById(R.id.appsText);
+        favText = findViewById(R.id.favText);
 
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
         primary = ContextCompat.getColor(this, android.R.color.secondary_text_dark);
 
-        viewPager = (ViewPager) findViewById(R.id.pager);
+        viewPager = findViewById(R.id.pager);
         adapter = new PagerAdapter(this, getSupportFragmentManager());
         viewPager.setAdapter(adapter);
 
@@ -193,8 +195,8 @@ public class LauncherActivity extends AppCompatActivity implements SensorEventLi
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
-            case R.id.action_settings:
-                startActivity(new Intent(LauncherActivity.this, SettingsActivity.class));
+            case R.id.action_about:
+                Attribouter.from(this).show();
                 break;
             case R.id.action_hidden:
                 startActivity(new Intent(LauncherActivity.this, HiddenActivity.class));

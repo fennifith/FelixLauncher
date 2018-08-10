@@ -18,7 +18,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.james.felixlauncher.R;
-import com.james.felixlauncher.activities.SettingsActivity;
 import com.james.felixlauncher.data.AppData;
 import com.james.felixlauncher.views.SquareImageView;
 
@@ -112,13 +111,11 @@ public class AppDataAdapter extends RecyclerView.Adapter<AppDataAdapter.ViewHold
 
         holder.v.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
 
-        TextView title = (TextView) holder.v.findViewById(R.id.name);
+        TextView title = holder.v.findViewById(R.id.name);
         title.setText(app.label);
-        title.setTextColor(SettingsActivity.getPrimaryTextColor(activity));
 
-        TextView subtitle = (TextView) holder.v.findViewById(R.id.extra);
+        TextView subtitle = holder.v.findViewById(R.id.extra);
         subtitle.setText(app.getDescription());
-        subtitle.setTextColor(SettingsActivity.getSecondaryTextColor(activity));
 
         if (app.icon != null)
             ((SquareImageView) holder.v.findViewById(R.id.image)).setImageDrawable(app.icon);

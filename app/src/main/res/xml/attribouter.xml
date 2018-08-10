@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<about>
+
+    <me.jfenn.attribouter.wedges.AppWedge
+        repo="TheAndroidMaster/FelixLauncher" />
+
+    <me.jfenn.attribouter.wedges.ContributorsWedge
+        repo="TheAndroidMaster/FelixLauncher">
+
+        <me.jfenn.attribouter.wedges.ContributorWedge
+            login="TheAndroidMaster"
+            name="James Fenn"
+            task="^Developer"
+            blog="https://jfenn.me/" />
+
+        <me.jfenn.attribouter.wedges.ContributorWedge
+            name="Felix Cepero"
+            task="Design Feedback" />
+
+    </me.jfenn.attribouter.wedges.ContributorsWedge>
+
+    <me.jfenn.attribouter.wedges.LicensesWedge/>
+
+</about>

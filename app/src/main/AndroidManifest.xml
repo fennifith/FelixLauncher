@@ -27,17 +27,6 @@
         </activity>
 
         <activity
-            android:name=".activities.SettingsActivity"
-            android:label="@string/settings"
-            android:theme="@style/Theme.AppCompat"
-            android:parentActivityName="com.james.felixlauncher.activities.LauncherActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.james.felixlauncher.activities.LauncherActivity" />
-
-        </activity>
-
-        <activity
             android:name=".activities.HiddenActivity"
             android:label="@string/hidden_apps"
             android:theme="@style/Theme.AppCompat"
